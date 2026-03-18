@@ -1931,7 +1931,7 @@
 <div class="del-backdrop" id="del-backdrop" hidden aria-modal="true" role="dialog" aria-label="Delete page">
   <div class="del-dialog">
     <div class="del-hdr">
-      <div class="del-title" id="del-title">Delete Page 1?</div>
+      <div class="del-title" id="del-title">Delete this page</div>
       <button class="del-close" onclick="closeDelConfirm()" aria-label="Close">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1939,11 +1939,11 @@
       </button>
     </div>
     <div class="del-body" id="del-body">
-      This will permanently remove Page 1 and all its blocks and links. This can't be undone.
+      This will permanently delete the page and all associated links and blocks, and cannot be undone.
     </div>
     <div class="del-ftr">
       <button class="btn-secondary" onclick="closeDelConfirm()">Cancel</button>
-      <button class="btn-danger" onclick="delConfirmDelete()">Delete page</button>
+      <button class="btn-danger" onclick="delConfirmDelete()">Yes, continue</button>
     </div>
   </div>
 </div>
@@ -2435,8 +2435,8 @@
     e.stopPropagation();
     delPendingIdx = idx;
     const pageNum = mpdfPages[idx].num;
-    document.getElementById('del-title').textContent = 'Delete Page ' + pageNum + '?';
-    document.getElementById('del-body').textContent = 'This will permanently remove Page ' + pageNum + ' and all its blocks and links. This can\'t be undone.';
+    document.getElementById('del-title').textContent = 'Delete this page';
+    document.getElementById('del-body').textContent = 'This will permanently delete the page and all associated links and blocks, and cannot be undone.';
     document.getElementById('del-backdrop').removeAttribute('hidden');
   }
 
