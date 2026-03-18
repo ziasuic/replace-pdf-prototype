@@ -1,0 +1,2964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Flyer – Feb 18, 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f6f7f8;
+      color: #242529;
+      min-height: 100vh;
+    }
+
+    :root {
+      --brand-dark:        #003d29;
+      --brand-regular:     #0a5546;
+      --brand-light:       #ecf6f3;
+      --brand-extra-light: #f5fbf9;
+      --gray-00:           #ffffff;
+      --gray-20:           #e8e9eb;
+      --gray-30:           #c7c8cd;
+      --gray-60:           #56595e;
+      --gray-70:           #6e7079;
+      --gray-80:           #242529;
+      --positive-bg:       #e9fbe9;
+      --error-bg:          #fef0f0;
+      --danger:            #de3534;
+      --info-bg:           #fcf7f1;
+      --shadow-low:        0 1px 8px rgba(0,0,0,0.08);
+      --nav-h:             64px;
+    }
+
+    svg { display: block; flex-shrink: 0; }
+
+    /* ─── Top Nav ──────────────────────────────────────────────── */
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--brand-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px 0 18px;
+      z-index: 100;
+    }
+    .nav-left  { display: flex; align-items: center; gap: 8px; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+
+    .logo-text {
+      font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
+      color: white; white-space: nowrap; user-select: none;
+    }
+    .logo-text em { color: #a3d977; font-style: normal; }
+
+    .nav-btn {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; background: transparent; border: none;
+      color: white; cursor: pointer; position: relative;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover  { background: rgba(255,255,255,0.1); }
+    .nav-btn:active { background: rgba(255,255,255,0.18); }
+    .notif-dot {
+      position: absolute; top: 8px; right: 8px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--danger); border: 2px solid var(--brand-dark);
+      pointer-events: none;
+    }
+    .partner-btn {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 8px 12px 8px 16px;
+      border-radius: 8px; background: transparent; border: none;
+      color: white; font-size: 14px; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .partner-btn:hover  { background: rgba(255,255,255,0.1); }
+    .partner-btn:active { background: rgba(255,255,255,0.18); }
+
+    /* ─── Page scaffold ────────────────────────────────────────── */
+    .page-body {
+      margin-top: var(--nav-h);
+      background: var(--gray-00);
+      min-height: calc(100vh - var(--nav-h));
+    }
+
+    /* ─── Page Header ──────────────────────────────────────────── */
+    .page-header {
+      background: var(--gray-00);
+      padding: 24px 80px 16px;
+      position: sticky; top: 0; z-index: 50;
+      border-bottom: 1px solid var(--gray-20);
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 8px;
+    }
+    .breadcrumb a {
+      display: flex; align-items: center; gap: 4px;
+      color: var(--brand-regular); font-size: 14px; font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .breadcrumb a:hover { color: #0c6b57; text-decoration: underline; }
+
+    .page-title-row {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .page-headline {
+      font-size: 28px; font-weight: 600; line-height: 32px;
+      color: var(--gray-80);
+    }
+
+    /* ─── Marker ───────────────────────────────────────────────── */
+    .marker {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 18px; padding: 0 4px;
+      font-size: 12px; line-height: 16px;
+      border-radius: 2px; white-space: nowrap; flex-shrink: 0;
+      font-weight: 400;
+    }
+    .marker-neutral   { background: var(--gray-20);    color: var(--gray-80); }
+    .marker-warning     { background: var(--error-bg);   color: var(--gray-80); }
+    .marker-warning   { background: #fef3c7;           color: var(--gray-80); }
+    .marker-positive  { background: var(--positive-bg);color: var(--gray-80); }
+
+    /* ─── Main content ─────────────────────────────────────────── */
+    .main-content {
+      padding: 32px 80px 80px;
+      position: relative;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .content-left { flex: 0 0 628px; min-width: 0; }
+
+    /* ─── Form section ─────────────────────────────────────────── */
+    .form-section { margin-bottom: 32px; }
+
+    .section-title {
+      font-size: 18px; font-weight: 600; line-height: 22px;
+      color: var(--gray-80);
+    }
+    .section-desc {
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--gray-80); margin-top: 2px;
+    }
+
+    /* ─── Details title row ─────────────────────────────────────── */
+    .details-title-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 8px; margin-bottom: 24px;
+    }
+    .btn-text-action {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+      border-radius: 4px; font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--brand-regular); white-space: nowrap;
+      transition: background 0.12s;
+    }
+    .btn-text-action:hover  { background: var(--brand-light); }
+    .btn-text-action:active { background: var(--brand-extra-light); }
+    .btn-text-action:focus  { outline: none; box-shadow: 0 0 0 2px rgba(10,85,70,0.2); }
+
+    /* ─── Input fields ─────────────────────────────────────────── */
+    .input-group {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    /* Read-only display (view mode) */
+    .field { display: flex; flex-direction: column; gap: 2px; }
+    .field-label {
+      font-size: 14px; font-weight: 600; line-height: 20px; color: var(--gray-80);
+    }
+    .field-value {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0;
+      font-size: 14px; font-weight: 600; line-height: 20px; color: var(--gray-80);
+    }
+    .field-date-value {
+      width: 360px;
+    }
+    .icon-muted { color: var(--gray-60); flex-shrink: 0; }
+
+    /* Editable mode (active inputs) */
+    .text-field {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 8px 0 16px;
+      border: 1px solid var(--gray-30); border-radius: 8px;
+      background: var(--gray-00);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      cursor: text;
+    }
+    .text-field:focus-within {
+      border-color: var(--brand-regular);
+      box-shadow: 0 0 0 2px rgba(10,85,70,0.15);
+    }
+    .text-field:hover:not(:focus-within) { border-color: #9b9da3; }
+    .text-field input {
+      flex: 1; border: none; outline: none; min-width: 0;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--gray-80); background: transparent;
+    }
+    .char-counter { font-size: 12px; line-height: 16px; color: var(--gray-60); align-self: flex-end; }
+    .field-label-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+    }
+    .clear-btn {
+      width: 20px; height: 20px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: none; background: none; cursor: pointer;
+      color: var(--gray-60); border-radius: 4px; padding: 0;
+      opacity: 0; transition: opacity 0.15s, background 0.12s;
+    }
+    .text-field:focus-within .clear-btn,
+    .text-field:hover        .clear-btn { opacity: 1; }
+    .clear-btn:hover { background: var(--gray-20); color: var(--gray-80); }
+
+    .date-field {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 8px;
+      border: 1px solid var(--gray-30); border-radius: 8px;
+      background: var(--gray-00); cursor: pointer; width: 360px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .date-field:hover  { border-color: var(--brand-regular); }
+    .date-field:focus  { outline: none; border-color: var(--brand-regular); box-shadow: 0 0 0 2px rgba(10,85,70,0.15); }
+    .date-value {
+      flex: 1; font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--gray-80); white-space: nowrap;
+    }
+
+    /* Hide/show edit vs view modes */
+    .view-mode  { display: flex; }
+    .edit-mode  { display: none; }
+    .is-editing .view-mode { display: none; }
+    .is-editing .edit-mode { display: flex; }
+
+    /* ─── Divider ──────────────────────────────────────────────── */
+    .divider { height: 1px; background: var(--gray-20); }
+
+    /* ─── Flyer versions ───────────────────────────────────────── */
+    .versions-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 8px; padding-bottom: 12px;
+    }
+    .link-action {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--brand-regular); text-decoration: underline;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      background: none; border: none; padding: 0;
+    }
+    .link-action:hover { color: #0c6b57; }
+
+    /* ─── Version card ─────────────────────────────────────────── */
+    .version-block { margin-bottom: 0; }
+    .version-block + .version-block { margin-top: 0; }
+    .version-block-divider { margin: 16px 0; }
+
+    .version-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding-bottom: 4px;
+    }
+    .version-info { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; align-items: flex-start; }
+    .version-link-text {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--brand-regular); text-decoration: underline;
+      cursor: pointer; display: inline-block;
+    }
+    .version-link-text:hover { color: #0c6b57; }
+    .version-meta {
+      font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-80);
+    }
+
+    /* Button group */
+    .version-actions {
+      display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0; margin-left: 16px;
+    }
+
+    /* Compact icon button (⋯) */
+    .overflow-btn {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--gray-30); border-radius: 4px;
+      background: transparent; cursor: pointer;
+      color: var(--gray-70); transition: all 0.15s;
+      position: relative; flex-shrink: 0;
+    }
+    .overflow-btn:hover  { background: var(--brand-light); border-color: var(--brand-regular); color: var(--brand-regular); }
+    .overflow-btn:focus  { outline: none; box-shadow: 0 0 0 2px rgba(10,85,70,0.2); }
+    .overflow-btn.active { background: var(--brand-extra-light); border-color: var(--brand-regular); color: var(--brand-regular); }
+
+    /* Dropdown */
+    .overflow-wrap { position: relative; }
+    .dropdown {
+      position: absolute; top: calc(100% + 4px); right: 0;
+      background: var(--gray-00); border-radius: 8px;
+      box-shadow: var(--shadow-low);
+      min-width: 220px; overflow: hidden;
+      display: none; z-index: 300;
+      animation: dropIn 0.12s ease;
+    }
+    @keyframes dropIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .dropdown.open { display: block; }
+    .dropdown-item {
+      height: 40px; display: flex; align-items: center;
+      padding: 0 16px; cursor: pointer;
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--gray-80); transition: background 0.1s;
+    }
+    .dropdown-item:hover { background: #f6f7f8; }
+    .dropdown-item.danger { color: var(--danger); }
+    .dropdown-item.danger:hover { background: var(--error-bg); }
+
+    /* Action buttons */
+    .btn-primary {
+      height: 36px; padding: 0 16px;
+      background: var(--brand-regular); color: white;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      border: none; border-radius: 8px; cursor: pointer;
+      white-space: nowrap; transition: background 0.15s;
+    }
+    .btn-primary:hover  { background: #0c6b57; }
+    .btn-primary:active { background: #084d40; }
+    .btn-primary:focus  { outline: none; box-shadow: 0 0 0 2px rgba(10,85,70,0.25); }
+
+    .btn-secondary {
+      height: 36px; padding: 0 16px;
+      background: transparent; color: var(--brand-regular);
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      border: 1.5px solid var(--brand-regular); border-radius: 8px;
+      cursor: pointer; white-space: nowrap; transition: all 0.15s;
+    }
+    .btn-secondary:hover  { background: var(--brand-light); }
+    .btn-secondary:active { background: var(--brand-extra-light); }
+    .btn-secondary:focus  { outline: none; box-shadow: 0 0 0 2px rgba(10,85,70,0.2); }
+
+    /* ─── Preview disclosure row ───────────────────────────────── */
+    .preview-row {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 44px; padding-left: 16px; padding-right: 4px;
+      cursor: pointer; border-radius: 6px;
+      transition: background 0.12s;
+    }
+    .preview-row:hover { background: #f6f7f8; }
+    .preview-left { display: flex; align-items: center; gap: 12px; }
+    .preview-chevron {
+      width: 16px; height: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--brand-regular);
+      transition: transform 0.2s;
+    }
+    .preview-chevron.open { transform: rotate(90deg); }
+    .preview-label {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--brand-regular);
+    }
+    .preview-body {
+      display: none;
+      padding-left: 36px;
+    }
+    .preview-body.open { display: block; }
+
+    /* ─── Page rows (inside preview) ──────────────────────────── */
+    .page-list { width: 100%; }
+    .page-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 8px 8px 0; background: var(--gray-00);
+      cursor: pointer; transition: background 0.12s;
+    }
+    .page-row:hover { background: var(--brand-extra-light); }
+    .page-row:hover .page-name { color: var(--brand-regular); }
+    .page-row:hover .page-icon { color: var(--brand-regular); }
+    .page-row + .page-row { border-top: 1px solid var(--gray-20); }
+
+    /* ─── Floating page preview panel ──────────────────────────── */
+    .page-preview-float {
+      position: fixed;
+      width: 260px;
+      background: var(--gray-00);
+      border-radius: 8px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.16);
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s;
+      z-index: 400;
+    }
+    .page-preview-float.visible { opacity: 1; }
+    .page-preview-img { width: 100%; display: block; }
+    .page-preview-footer {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px;
+      border-top: 1px solid var(--gray-20);
+    }
+    .page-preview-name {
+      font-size: 12px; font-weight: 600; line-height: 16px;
+      color: var(--gray-80); flex: 1;
+    }
+    .page-row-left  { display: flex; align-items: center; gap: 12px; }
+    .page-row-right { display: flex; align-items: center; gap: 24px; flex-shrink: 0; }
+    .page-icon { color: var(--gray-60); flex-shrink: 0; }
+    .page-name {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--gray-80); min-width: 56px;
+    }
+    .coverage-marker {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 18px; padding: 0 4px;
+      font-size: 12px; line-height: 16px; border-radius: 2px;
+      background: var(--gray-20); color: var(--gray-80); white-space: nowrap;
+    }
+    .page-arrow { color: var(--brand-regular); flex-shrink: 0; }
+
+    /* ─── Sidebar (educational card) ──────────────────────────── */
+    .content-right { flex: 0 0 300px; padding-top: 0; }
+    .edu-card {
+      background: var(--info-bg); border-radius: 8px;
+      padding: 16px; display: flex; gap: 8px; align-items: flex-start;
+    }
+    .edu-card.hidden { display: none; }
+    .edu-body { flex: 1; }
+    .edu-title {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--gray-80); margin-bottom: 16px;
+    }
+    .edu-text {
+      font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-80);
+    }
+    .edu-close {
+      width: 28px; height: 28px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--brand-regular); border-radius: 4px;
+      background: var(--gray-00); cursor: pointer;
+      color: var(--brand-regular); transition: all 0.15s;
+    }
+    .edu-close:hover  { background: var(--brand-light); }
+    .edu-close:active { background: var(--brand-extra-light); }
+    .edu-close:focus  { outline: none; box-shadow: 0 0 0 2px rgba(10,85,70,0.2); }
+
+    /* ─── Toast ────────────────────────────────────────────────── */
+    .toast-wrap {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+      z-index: 1500; pointer-events: none;
+    }
+    .toast {
+      display: flex; align-items: center; gap: 10px;
+      background: #1a2e23; color: white;
+      padding: 12px 18px; border-radius: 8px;
+      font-size: 14px; line-height: 20px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      min-width: 280px; white-space: nowrap;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast-icon {
+      width: 20px; height: 20px; flex-shrink: 0;
+      background: #2d7d5a; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─── Manage PDF Modal ─────────────────────────────────────── */
+    .mpdf-modal {
+      position: fixed; inset: 0; z-index: 1200;
+      background: var(--gray-00);
+      display: flex; flex-direction: column;
+    }
+    .mpdf-modal[hidden] { display: none; }
+
+    .mpdf-nav {
+      flex-shrink: 0; height: var(--nav-h);
+      background: var(--brand-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px 0 18px;
+    }
+
+    .mpdf-page-hdr {
+      flex-shrink: 0;
+      background: var(--gray-00); border-bottom: 1px solid var(--gray-20);
+      padding: 16px 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .mpdf-close {
+      width: 28px; height: 28px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: none; background: none; cursor: pointer;
+      border-radius: 4px; color: var(--gray-80);
+      transition: background 0.12s;
+    }
+    .mpdf-close:hover { background: var(--gray-20); }
+    .mpdf-title-text {
+      font-size: 28px; font-weight: 600; line-height: 32px; color: var(--gray-80);
+    }
+    .mpdf-hdr-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+    .mpdf-body { flex: 1; overflow-y: auto; background: #f6f7f8; padding: 24px; }
+    .mpdf-section-hdr {
+      font-size: 18px; font-weight: 600; line-height: 22px;
+      color: var(--gray-80); margin-bottom: 16px;
+    }
+    .mpdf-grid { display: flex; flex-wrap: wrap; gap: 9px; }
+
+    /* ─── Page card ────────────────────────────────────────────── */
+    .pc {
+      width: 180px; height: 278px;
+      border: 1px solid var(--gray-20); border-radius: 4px;
+      background: var(--gray-00);
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 4px 8px 8px; flex-shrink: 0;
+      overflow: visible; position: relative;
+      cursor: grab;
+      transition: box-shadow 0.15s;
+    }
+    .pc:active { cursor: grabbing; }
+    .pc.hidden-pg { background: #f6f7f8; }
+    .pc.dragging  { opacity: 0.35; cursor: grabbing; }
+
+    .pc.drop-left::before,
+    .pc.drop-right::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 3px; border-radius: 2px;
+      background: var(--brand-regular);
+      pointer-events: none; z-index: 10;
+    }
+    .pc.drop-left::before  { left:  -5px; }
+    .pc.drop-right::after  { right: -5px; }
+
+    .pc-thumb {
+      flex: 0 0 230px;
+      background: #f6f7f8;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      border-radius: 2px;
+    }
+    .pc-thumb > svg { display: block; flex-shrink: 0; pointer-events: none; }
+    .pc { user-select: none; }
+    .hidden-pg .pc-thumb > svg { opacity: 0.2; }
+
+    .pc-overlay {
+      position: absolute; inset: 0;
+      background: var(--brand-light);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; opacity: 0; pointer-events: none;
+      transition: opacity 0.15s;
+    }
+    .pc-thumb:hover .pc-overlay { opacity: 1; }
+    .pc-thumb:hover .pc-overlay .pc-ov-btn { pointer-events: auto; }
+
+    .pc-ov-btn {
+      min-width: 112px; height: 28px; padding: 0 16px;
+      background: var(--gray-00); border: none; border-radius: 4px;
+      font-size: 12px; font-weight: 600; line-height: 16px;
+      cursor: pointer; white-space: nowrap;
+      transition: opacity 0.12s;
+    }
+    .pc-ov-btn:hover { opacity: 0.85; }
+    .pc-ov-replace { color: var(--brand-regular); }
+    .pc-ov-delete  { color: var(--danger); }
+
+    .pc-footer {
+      height: 28px; padding: 0 2px;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .pc-grab { flex-shrink: 0; color: var(--gray-60); display: flex; align-items: center; }
+    .pc-label {
+      flex: 1; min-width: 0;
+      font-size: 14px; font-weight: 600; line-height: 20px; color: var(--gray-80);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .hidden-pg .pc-label { color: var(--gray-30); }
+    .pc-eye {
+      width: 28px; height: 28px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: none; background: none; cursor: pointer;
+      border-radius: 4px; color: var(--gray-60);
+      transition: background 0.12s;
+    }
+    .pc-eye:hover { background: var(--gray-20); }
+    .hidden-pg .pc-eye { color: var(--gray-30); }
+
+    /* Add page card */
+    .pc-add {
+      width: 180px; height: 278px;
+      background: var(--gray-00);
+      border: 1.5px dashed var(--brand-regular);
+      border-radius: 4px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 8px;
+      cursor: pointer; flex-shrink: 0;
+      transition: background 0.12s;
+    }
+    .pc-add:hover { background: var(--brand-extra-light); }
+    .pc-add-btn {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--brand-regular);
+    }
+
+    /* ─── Replace PDF uploader modal ──────────────────────────── */
+    .uploader-backdrop {
+      position: fixed; inset: 0; z-index: 1300;
+      background: rgba(0,0,0,0.45);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .uploader-backdrop[hidden] { display: none; }
+
+    .uploader-dialog {
+      background: var(--gray-00);
+      border-radius: 8px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+      width: 411px; max-width: calc(100vw - 48px);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    .uploader-hdr {
+      padding: 24px;
+      height: 76px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--gray-20);
+      flex-shrink: 0;
+    }
+    .uploader-hdr-title {
+      flex: 1;
+      font-size: 24px; font-weight: 600; line-height: 28px; color: var(--gray-80);
+    }
+    .uploader-close {
+      width: 32px; height: 32px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--gray-30); background: none; cursor: pointer;
+      border-radius: 4px; color: var(--gray-80);
+      transition: background 0.12s;
+    }
+    .uploader-close:hover { background: var(--gray-20); }
+
+    .uploader-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+    .uploader-dropzone {
+      border: 1px dashed var(--brand-regular);
+      border-radius: 8px;
+      background: var(--brand-extra-light);
+      padding: 48px 16px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 16px; text-align: center;
+      transition: border-color 0.15s, background 0.15s;
+      cursor: pointer;
+    }
+    .uploader-dropzone.drag-over {
+      border-color: var(--brand-dark);
+      background: var(--brand-light);
+    }
+    .uploader-dropzone-icon { color: var(--brand-regular); }
+    .uploader-dropzone-main {
+      font-size: 18px; font-weight: 600; line-height: 22px; color: var(--brand-regular);
+    }
+    .uploader-dropzone-hint {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; line-height: 16px; color: var(--gray-60);
+    }
+
+    /* Selected file row */
+    .uploader-file-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
+      background: var(--brand-extra-light);
+      border: 1px solid var(--brand-light);
+      border-radius: 8px;
+    }
+    .uploader-file-row[hidden] { display: none; }
+    .uploader-file-icon { color: var(--brand-regular); flex-shrink: 0; }
+    .uploader-file-info { flex: 1; min-width: 0; }
+    .uploader-file-name {
+      font-size: 14px; font-weight: 600; color: var(--gray-80);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .uploader-file-size { font-size: 12px; color: var(--gray-60); margin-top: 1px; }
+    .uploader-file-remove {
+      width: 28px; height: 28px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: none; background: none; cursor: pointer;
+      border-radius: 4px; color: var(--gray-60);
+      transition: background 0.12s;
+    }
+    .uploader-file-remove:hover { background: var(--gray-20); }
+
+    .uploader-ftr {
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-20);
+      display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+    }
+    .uploader-ftr[hidden] { display: none; }
+
+    /* Progress view (shown during / after upload) */
+    .uploader-progress-wrap[hidden] { display: none; }
+
+    @keyframes up-shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+
+    .up-progress-card {
+      background: var(--brand-extra-light);
+      border: 1px solid var(--brand-regular);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .up-progress-left {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .up-bar-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .up-bar-track {
+      flex: 1; height: 4px; border-radius: 2px;
+      background: #c7c8cd; overflow: hidden;
+    }
+    .up-bar-fill {
+      height: 100%; border-radius: 2px;
+      background: var(--brand-regular);
+      width: 0%; transition: width 0.25s ease;
+    }
+    .up-bar-fill.animating {
+      background: linear-gradient(90deg, var(--brand-regular) 30%, #2a9d7a 50%, var(--brand-regular) 70%);
+      background-size: 200% auto;
+      animation: up-shimmer 1.4s linear infinite;
+    }
+    .up-pct {
+      width: 34px; text-align: right; flex-shrink: 0;
+      font-size: 12px; font-weight: 600; line-height: 16px; color: var(--gray-60);
+    }
+    .up-file-info { display: flex; flex-direction: column; gap: 1px; }
+    .up-file-label-name {
+      font-size: 12px; font-weight: 600; line-height: 16px; color: var(--gray-80);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .up-file-label-size {
+      font-size: 12px; font-weight: 400; line-height: 16px; color: var(--gray-60);
+    }
+    .up-cancel-link {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--brand-regular); background: none; border: none;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+    .up-cancel-link:hover { text-decoration: underline; }
+
+
+    /* ─── Delete page confirmation modal ──────────────────────── */
+    @keyframes del-fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes del-slide-in {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .del-backdrop {
+      position: fixed; inset: 0; z-index: 1400;
+      background: rgba(36,37,41,0.55);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 72px;
+      animation: del-fade-in 0.18s ease;
+    }
+    .del-backdrop[hidden] { display: none; }
+
+    .del-dialog {
+      background: var(--gray-00);
+      border-radius: 8px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+      width: 411px; max-width: calc(100vw - 48px);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      animation: del-slide-in 0.22s ease;
+    }
+    .del-hdr {
+      padding: 24px; height: 76px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--gray-20); flex-shrink: 0;
+    }
+    .del-title {
+      flex: 1; font-size: 24px; font-weight: 600; line-height: 28px; color: var(--gray-80);
+    }
+    .del-close {
+      width: 32px; height: 32px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--gray-30); background: none; cursor: pointer;
+      border-radius: 4px; color: var(--gray-80); transition: background 0.12s;
+    }
+    .del-close:hover { background: var(--gray-20); }
+    .del-body {
+      padding: 24px;
+      font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-80);
+    }
+    .del-ftr {
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-20);
+      display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+      flex-shrink: 0;
+    }
+    .btn-danger {
+      height: 36px; padding: 0 16px;
+      background: #d93025; color: white;
+      border: none; border-radius: 6px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background 0.12s;
+    }
+    .btn-danger:hover { background: #b8271e; }
+
+    /* ─── PDF Saved / apply-to-others modal ───────────────────── */
+    @keyframes pdf-saved-fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pdf-saved-slide-in {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .pdf-saved-backdrop {
+      position: fixed; inset: 0; z-index: 1350;
+      background: rgba(36,37,41,0.55);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 72px;
+      animation: pdf-saved-fade-in 0.18s ease;
+    }
+    .pdf-saved-backdrop[hidden] { display: none; }
+
+    .pdf-saved-dialog {
+      background: var(--gray-00);
+      border-radius: 8px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+      width: 628px; max-width: calc(100vw - 48px);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      animation: pdf-saved-slide-in 0.22s ease;
+    }
+
+    .pdf-saved-hdr {
+      padding: 24px;
+      height: 76px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--gray-20);
+      flex-shrink: 0;
+    }
+    .pdf-saved-title {
+      flex: 1;
+      font-size: 24px; font-weight: 600; line-height: 28px; color: var(--gray-80);
+    }
+    .pdf-saved-close {
+      width: 32px; height: 32px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--gray-30); background: none; cursor: pointer;
+      border-radius: 4px; color: var(--gray-80);
+      transition: background 0.12s;
+    }
+    .pdf-saved-close:hover { background: var(--gray-20); }
+
+    .pdf-saved-body {
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .pdf-saved-desc {
+      font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-80);
+    }
+
+
+    .pdf-saved-checkboxes {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .pdf-saved-cb-row {
+      display: flex; gap: 16px;
+    }
+    .pdf-saved-cb-item {
+      flex: 1; display: flex; gap: 8px; align-items: center; cursor: pointer;
+    }
+    .pdf-saved-cb-item input[type="checkbox"] {
+      flex-shrink: 0; accent-color: var(--brand-regular);
+      width: 16px; height: 16px; cursor: pointer;
+    }
+    .pdf-saved-cb-label {
+      font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-80);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .pdf-saved-ftr {
+      padding: 16px 24px;
+      border-top: 1px solid var(--gray-20);
+      display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Flyer Builder page ───────────────────────────────────── */
+    .builder-screen {
+      position: fixed; inset: 0; z-index: 1100;
+      background: white;
+      display: flex; flex-direction: column;
+      animation: pdf-saved-fade-in 0.15s ease;
+    }
+    .builder-screen[hidden] { display: none; }
+
+    .builder-topbar {
+      height: 64px; flex-shrink: 0;
+      background: var(--brand-dark);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px 0 18px;
+    }
+    .builder-topbar-left { display: flex; align-items: center; gap: 8px; }
+    .builder-back {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      border: none; background: none; cursor: pointer; border-radius: 8px; color: white;
+      transition: background 0.12s;
+    }
+    .builder-back:hover { background: rgba(255,255,255,0.12); }
+    .builder-logo { color: white; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+    .builder-logo em { font-style: normal; font-weight: 400; color: rgba(255,255,255,0.75); }
+    .builder-topbar-right { display: flex; align-items: center; gap: 12px; }
+    .builder-retailer-btn {
+      height: 36px; padding: 0 12px;
+      background: rgba(255,255,255,0.12); border: none; border-radius: 8px;
+      color: white; font-size: 14px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .builder-page-hdr {
+      flex-shrink: 0;
+      background: white; border-bottom: 1px solid var(--gray-20);
+      padding: 16px 24px 12px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .builder-hdr-row {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .builder-close-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; flex-shrink: 0;
+      background: none; border: none; cursor: pointer; padding: 2px;
+      color: var(--gray-80); border-radius: 4px;
+    }
+    .builder-close-btn:hover { background: var(--gray-10); }
+    .builder-title {
+      font-size: 28px; font-weight: 600; line-height: 32px; color: var(--gray-80);
+      flex-shrink: 0;
+    }
+    .builder-hdr-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .builder-filter-row { display: flex; align-items: center; gap: 8px; }
+    .builder-dropdown {
+      height: 40px; padding: 0 12px;
+      border: 1px solid var(--gray-30); border-radius: 8px;
+      background: white; font-size: 14px; font-weight: 600; color: var(--gray-80);
+      display: flex; align-items: center; gap: 6px; cursor: pointer;
+    }
+    .builder-dropdown svg { color: var(--gray-60); flex-shrink: 0; }
+
+    .builder-body {
+      flex: 1; display: flex; overflow: hidden;
+    }
+
+    /* Left panel */
+    .builder-left {
+      width: 279px; flex-shrink: 0;
+      border-right: 1px solid var(--gray-20);
+      display: flex; flex-direction: column;
+      padding: 12px 16px;
+      gap: 4px;
+      overflow-y: auto;
+    }
+    .builder-seg {
+      display: flex; border: 1px solid var(--gray-20); border-radius: 8px;
+      overflow: hidden; flex-shrink: 0; margin-bottom: 8px;
+    }
+    .builder-seg-btn {
+      flex: 1; height: 40px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      border: none; background: white; color: var(--brand-regular);
+    }
+    .builder-seg-btn.active { background: var(--brand-extra-light); color: var(--brand-dark); }
+    .builder-blocks-label {
+      font-size: 14px; font-weight: 400; color: var(--gray-80);
+      padding: 8px; flex-shrink: 0;
+    }
+    .builder-block-item {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; padding: 0 8px; border-radius: 8px;
+      font-size: 12px; color: var(--gray-80); cursor: pointer;
+      flex-shrink: 0;
+    }
+    .builder-block-item:hover { background: var(--gray-10); }
+    .builder-block-item.active { background: var(--brand-extra-light); font-weight: 600; }
+    .builder-block-dot {
+      width: 16px; height: 16px; flex-shrink: 0;
+      background: var(--brand-extra-light); border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .builder-block-dot svg { color: var(--brand-regular); }
+    .builder-missing { margin-left: auto; }
+
+    /* Center canvas */
+    .builder-canvas-wrap {
+      flex: 1; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .builder-canvas-toolbar {
+      height: 60px; flex-shrink: 0;
+      background: #e8e9eb;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px;
+    }
+    .builder-canvas-toolbar-left { display: flex; align-items: center; gap: 8px; }
+    .builder-canvas-toolbar-right { display: flex; align-items: center; gap: 8px; }
+    .builder-icon-btn {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: white; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-80);
+    }
+    .builder-icon-btn:hover { background: var(--gray-20); }
+    .builder-page-label {
+      font-size: 14px; font-weight: 600; color: var(--gray-80);
+    }
+    .builder-text-btn {
+      height: 40px; padding: 0 16px;
+      background: white; border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 600; color: var(--brand-regular);
+      cursor: pointer;
+    }
+    .builder-text-btn:hover { background: var(--brand-extra-light); }
+    .builder-canvas {
+      flex: 1; background: #f6f7f8;
+      display: flex; align-items: center; justify-content: center;
+      overflow: auto;
+    }
+    .builder-flyer-frame {
+      width: 424px; height: 635px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.16);
+      position: relative; flex-shrink: 0;
+    }
+    .builder-block-overlay {
+      position: absolute;
+      border: 2px solid #ffbe1d;
+      background: rgba(255,204,77,0.3);
+    }
+    .builder-block-overlay.selected {
+      border-color: #108910;
+      background: rgba(16,137,16,0.1);
+    }
+    .builder-block-scissors {
+      position: absolute; left: -42px; top: 20px;
+      width: 40px; height: 40px;
+      background: #343538;
+      border-radius: 8px 0 0 8px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .builder-block-scissors:hover { background: #4a4b4e; }
+
+    /* Right panel */
+    .builder-right {
+      width: 279px; flex-shrink: 0;
+      border-left: 1px solid var(--gray-20);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+    }
+    .builder-right-body {
+      padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; flex: 1;
+    }
+    .builder-block-name {
+      font-size: 14px; font-weight: 600; color: var(--gray-80);
+    }
+    .builder-field-label {
+      font-size: 14px; font-weight: 600; color: var(--gray-80); margin-bottom: 8px;
+    }
+    .builder-field-hint {
+      font-size: 12px; color: var(--gray-60); margin-bottom: 8px; line-height: 16px;
+    }
+    .builder-radio-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--gray-80); cursor: pointer; margin-bottom: 10px;
+    }
+    .builder-radio-row input { accent-color: var(--brand-regular); cursor: pointer; }
+    .builder-divider { height: 1px; background: var(--gray-20); margin: 4px 0; }
+    .builder-right-ftr {
+      padding: 12px 16px;
+      border-top: 1px solid var(--gray-20);
+      display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Proto badge ──────────────────────────────────────────── */
+    .proto-badge {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--brand-dark); color: white;
+      font-size: 12px; padding: 8px 14px; border-radius: 6px;
+      opacity: 0.9; z-index: 999; pointer-events: none;
+      box-shadow: var(--shadow-low);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOP NAV ══════════════════════════════════════════════════ -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <button class="nav-btn" aria-label="Apps menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <rect x="3"  y="3"  width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+        <rect x="14" y="3"  width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+        <rect x="3"  y="14" width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+        <rect x="14" y="14" width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+      </svg>
+    </button>
+    <div class="logo-text">instacart<em>platform</em></div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" aria-label="Notifications">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="white"/>
+      </svg>
+      <span class="notif-dot"></span>
+    </button>
+    <button class="nav-btn" aria-label="Search">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="white"/>
+      </svg>
+    </button>
+    <button class="nav-btn" aria-label="Help">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" fill="white"/>
+      </svg>
+    </button>
+    <button class="nav-btn" aria-label="Profile">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="white"/>
+      </svg>
+    </button>
+    <button class="partner-btn">
+      Fresh Grocery
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M4 6l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ PAGE BODY ════════════════════════════════════════════════ -->
+<div class="page-body">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="breadcrumb">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M15 18l-6-6 6-6" stroke="#0a5546" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <a href="screen1-flyer-list.html">Flyer</a>
+    </div>
+    <div class="page-title-row">
+      <h1 class="page-headline">Weekly flyer: Feb 18, 2026 – Feb 24, 2026</h1>
+      <span class="marker marker-neutral">Scheduled</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Left column -->
+    <div class="content-left">
+
+      <!-- ── Flyer Details ──────────────────────────────────────── -->
+      <div class="form-section" id="flyer-details-section">
+        <div class="details-title-row">
+          <div class="section-title">Details</div>
+          <button class="btn-text-action" onclick="toggleEditMode()" id="edit-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Edit
+          </button>
+        </div>
+
+        <div class="input-group">
+
+          <!-- Flyer title -->
+          <div class="field">
+            <span class="field-label">Flyer title</span>
+
+            <!-- View mode -->
+            <div class="field-value view-mode">Weekly Ad</div>
+
+            <!-- Edit mode -->
+            <div class="edit-mode" style="flex-direction:column;gap:2px;">
+              <div class="field-label-row">
+                <span></span>
+                <span class="char-counter" id="char-count">9/50</span>
+              </div>
+              <div class="text-field">
+                <input
+                  id="flyer-title"
+                  type="text"
+                  value="Weekly Ad"
+                  maxlength="50"
+                  autocomplete="off"
+                  aria-label="Flyer title"
+                />
+                <button class="clear-btn" aria-label="Clear flyer title" onclick="clearTitle()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schedule -->
+          <div class="field">
+            <span class="field-label">Schedule</span>
+
+            <!-- View mode -->
+            <div class="field-value field-date-value view-mode">
+              <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 9h18" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Feb 18, 2026 – Feb 24, 2026
+            </div>
+
+            <!-- Edit mode -->
+            <div class="edit-mode">
+              <div class="date-field" tabindex="0" role="button" aria-label="Date range picker">
+                <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M3 9h18" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="date-value">Feb 18, 2026 – Feb 24, 2026</span>
+                <svg class="icon-muted" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".6"/>
+                </svg>
+                <svg class="icon-muted" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+      </div>
+
+      <!-- ── Flyer Versions ─────────────────────────────────────── -->
+      <div class="form-section">
+
+        <div class="versions-header">
+          <div>
+            <div class="section-title">Versions (29)</div>
+          </div>
+        </div>
+
+        <!-- ── Version 1: Draft – 587 ─────────────────────────── -->
+        <div class="version-block">
+          <div class="version-row">
+            <div class="version-info">
+              <span class="marker marker-neutral">Scheduled</span>
+              <div>
+                <span class="version-link-text" onclick="openBuilder('587 (1 store)')">587 (1 store)</span>
+                <div class="version-meta">10 pages • 81 blocks</div>
+              </div>
+            </div>
+            <div class="version-actions">
+              <div class="overflow-wrap">
+                <button
+                  class="overflow-btn"
+                  aria-label="More options"
+                  aria-haspopup="true"
+                  onclick="toggleDropdown('dd1', this)"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <circle cx="5"  cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+                  </svg>
+                </button>
+                <div class="dropdown" id="dd1" role="menu">
+                  <div class="dropdown-item" role="menuitem" onclick="managePDF('587 (1 store)'); closeAllDropdowns()">Manage PDF</div>
+                  <div class="dropdown-item danger" role="menuitem" onclick="showToast('Cancel flyer action requires admin confirmation.'); closeAllDropdowns()">Cancel flyer (Admin)</div>
+                </div>
+              </div>
+              <button class="btn-secondary" onclick="showToast('Unscheduling 587…')">Unschedule</button>
+            </div>
+          </div>
+
+          <div class="preview-row" onclick="togglePreview('pv1')" role="button" aria-expanded="false" id="pr1">
+            <div class="preview-left">
+              <span class="preview-chevron" id="ch1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="preview-label">View page breakdown</span>
+            </div>
+            <span class="marker marker-warning">4 alerts</span>
+          </div>
+          <div class="preview-body" id="pv1">
+            <div class="page-list">
+              <div class="page-row" onclick="showToast('Opening Page 1 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 1</span>
+                  <span class="marker marker-warning">2 alerts</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">100% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 2 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 2</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">78% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 3 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 3</span>
+                  <span class="marker marker-warning">2 alerts</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">98% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 4 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 4</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">99% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 5 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 5</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">75% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 6 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 6</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">75% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 7 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 7</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">75% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider version-block-divider"></div>
+
+        <!-- ── Version 2: Scheduled – 606 ────────────────────── -->
+        <div class="version-block">
+          <div class="version-row">
+            <div class="version-info">
+              <span class="marker marker-neutral">Scheduled</span>
+              <div>
+                <span class="version-link-text" onclick="openBuilder('606 (1 store)')">606 (1 store)</span>
+                <div class="version-meta">10 pages • 81 blocks</div>
+              </div>
+            </div>
+            <div class="version-actions">
+              <div class="overflow-wrap">
+                <button
+                  class="overflow-btn"
+                  aria-label="More options"
+                  aria-haspopup="true"
+                  onclick="toggleDropdown('dd2', this)"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <circle cx="5"  cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+                  </svg>
+                </button>
+                <div class="dropdown" id="dd2" role="menu">
+                  <div class="dropdown-item" role="menuitem" onclick="managePDF('606 (1 store)'); closeAllDropdowns()">Manage PDF</div>
+                  <div class="dropdown-item danger" role="menuitem" onclick="showToast('Cancel flyer action requires admin confirmation.'); closeAllDropdowns()">Cancel flyer (Admin)</div>
+                </div>
+              </div>
+              <button class="btn-secondary" onclick="showToast('Unscheduling 606…')">Unschedule</button>
+            </div>
+          </div>
+
+          <div class="preview-row" onclick="togglePreview('pv2')" role="button" aria-expanded="false" id="pr2">
+            <div class="preview-left">
+              <span class="preview-chevron" id="ch2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="preview-label">View page breakdown</span>
+            </div>
+          </div>
+          <div class="preview-body" id="pv2">
+            <div class="page-list">
+              <div class="page-row" onclick="showToast('Opening Page 1 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 1</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">100% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 2 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 2</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">100% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 3 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 3</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">97% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 4 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 4</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">100% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 5 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 5</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">95% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider version-block-divider"></div>
+
+        <!-- ── Version 3: Scheduled – 709 ────────────────────── -->
+        <div class="version-block">
+          <div class="version-row">
+            <div class="version-info">
+              <span class="marker marker-neutral">Scheduled</span>
+              <div>
+                <span class="version-link-text" onclick="openBuilder('709 (1 store)')">709 (1 store)</span>
+                <div class="version-meta">10 pages • 81 blocks</div>
+              </div>
+            </div>
+            <div class="version-actions">
+              <div class="overflow-wrap">
+                <button
+                  class="overflow-btn"
+                  aria-label="More options"
+                  aria-haspopup="true"
+                  onclick="toggleDropdown('dd3', this)"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <circle cx="5"  cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+                  </svg>
+                </button>
+                <div class="dropdown" id="dd3" role="menu">
+                  <div class="dropdown-item" role="menuitem" onclick="managePDF('709 (1 store)'); closeAllDropdowns()">Manage PDF</div>
+                  <div class="dropdown-item danger" role="menuitem" onclick="showToast('Cancel flyer action requires admin confirmation.'); closeAllDropdowns()">Cancel flyer (Admin)</div>
+                </div>
+              </div>
+              <button class="btn-secondary" onclick="showToast('Unscheduling 709…')">Unschedule</button>
+            </div>
+          </div>
+
+          <div class="preview-row" onclick="togglePreview('pv3')" role="button" aria-expanded="false" id="pr3">
+            <div class="preview-left">
+              <span class="preview-chevron" id="ch3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="preview-label">View page breakdown</span>
+            </div>
+            <span class="marker marker-warning">6 alerts</span>
+          </div>
+          <div class="preview-body" id="pv3">
+            <div class="page-list">
+              <div class="page-row" onclick="showToast('Opening Page 1 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 1</span>
+                  <span class="marker marker-warning">1 alert</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">88% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 2 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 2</span>
+                  <span class="marker marker-warning">2 alerts</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">72% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 3 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 3</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">100% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 4 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 4</span>
+                  <span class="marker marker-warning">1 alert</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">81% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 5 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 5</span>
+                  <span class="marker marker-warning">2 alerts</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">65% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 6 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 6</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">93% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider version-block-divider"></div>
+
+        <!-- ── Version 4: Scheduled – 709 (duplicate) ─────────── -->
+        <div class="version-block">
+          <div class="version-row">
+            <div class="version-info">
+              <span class="marker marker-neutral">Scheduled</span>
+              <div>
+                <span class="version-link-text" onclick="openBuilder('709 (1 store)')">709 (1 store)</span>
+                <div class="version-meta">10 pages • 81 blocks</div>
+              </div>
+            </div>
+            <div class="version-actions">
+              <div class="overflow-wrap">
+                <button
+                  class="overflow-btn"
+                  aria-label="More options"
+                  aria-haspopup="true"
+                  onclick="toggleDropdown('dd4', this)"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <circle cx="5"  cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+                  </svg>
+                </button>
+                <div class="dropdown" id="dd4" role="menu">
+                  <div class="dropdown-item" role="menuitem" onclick="managePDF('709 (1 store)'); closeAllDropdowns()">Manage PDF</div>
+                  <div class="dropdown-item danger" role="menuitem" onclick="showToast('Cancel flyer action requires admin confirmation.'); closeAllDropdowns()">Cancel flyer (Admin)</div>
+                </div>
+              </div>
+              <button class="btn-secondary" onclick="showToast('Unscheduling 709…')">Unschedule</button>
+            </div>
+          </div>
+
+          <div class="preview-row" onclick="togglePreview('pv4')" role="button" aria-expanded="false" id="pr4">
+            <div class="preview-left">
+              <span class="preview-chevron" id="ch4">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="preview-label">View page breakdown</span>
+            </div>
+            <span class="marker marker-warning">6 alerts</span>
+          </div>
+          <div class="preview-body" id="pv4">
+            <div class="page-list">
+              <div class="page-row" onclick="showToast('Opening Page 1 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 1</span>
+                  <span class="marker marker-warning">1 alert</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">88% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 2 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 2</span>
+                  <span class="marker marker-warning">2 alerts</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">72% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 3 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 3</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">100% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 4 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 4</span>
+                  <span class="marker marker-warning">1 alert</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">81% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 5 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 5</span>
+                  <span class="marker marker-warning">2 alerts</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">65% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+              <div class="page-row" onclick="showToast('Opening Page 6 preview…')">
+                <div class="page-row-left">
+                  <svg class="page-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  <span class="page-name">Page 6</span>
+                </div>
+                <div class="page-row-right">
+                  <span class="coverage-marker">93% covered</span>
+                  <svg class="page-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /form-section versions -->
+    </div><!-- /content-left -->
+
+    <!-- Right sidebar: Educational card -->
+    <div class="content-right">
+      <div class="edu-card" id="edu-card">
+        <div class="edu-body">
+          <div class="edu-title">Let's review!</div>
+          <p class="edu-text">Take a minute to ensure your flyers are ready to go. You may preview each flyer on various storefronts, ensuring they are linked to the correct products &amp; destinations.</p>
+        </div>
+        <button class="edu-close" aria-label="Dismiss" onclick="dismissCard()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /page-body -->
+
+<!-- Toast notification -->
+<div class="toast-wrap" id="toast-wrap" aria-live="polite">
+  <div class="toast" id="toast">
+    <div class="toast-icon">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+        <path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span id="toast-msg"></span>
+  </div>
+</div>
+
+<!-- ═══ MANAGE PDF MODAL ════════════════════════════════════════ -->
+<div class="mpdf-modal" id="mpdf-modal" hidden aria-modal="true" role="dialog" aria-label="Manage PDF">
+
+  <!-- Top nav replica -->
+  <nav class="mpdf-nav">
+    <div class="nav-left">
+      <button class="nav-btn" aria-label="Apps menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <rect x="3"  y="3"  width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+          <rect x="14" y="3"  width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+          <rect x="3"  y="14" width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+        </svg>
+      </button>
+      <div class="logo-text">instacart<em>platform</em></div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn" aria-label="Notifications">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="white"/>
+        </svg>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="nav-btn" aria-label="Search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="white"/>
+        </svg>
+      </button>
+      <button class="nav-btn" aria-label="Help">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" fill="white"/>
+        </svg>
+      </button>
+      <button class="nav-btn" aria-label="Profile">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="white"/>
+        </svg>
+      </button>
+      <button class="partner-btn">
+        Fresh Grocery
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 6l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page header -->
+  <header class="mpdf-page-hdr">
+    <button class="mpdf-close" onclick="closeMpdf()" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <h1 class="mpdf-title-text">Manage PDF</h1>
+    <div class="mpdf-hdr-actions">
+      <button class="btn-secondary" onclick="closeMpdf()">Cancel</button>
+      <button class="btn-primary"   onclick="saveMpdf()">Save</button>
+    </div>
+  </header>
+
+  <!-- Scrollable body -->
+  <div class="mpdf-body">
+    <p class="mpdf-section-hdr">Pages (<span id="mpdf-count">12</span>)</p>
+    <div class="mpdf-grid" id="mpdf-grid"></div>
+  </div>
+
+</div>
+
+<!-- ═══ REPLACE PDF UPLOADER MODAL ═══════════════════════════════ -->
+<div class="uploader-backdrop" id="uploader-backdrop" hidden aria-modal="true" role="dialog" aria-label="Replace PDF">
+  <div class="uploader-dialog">
+
+    <div class="uploader-hdr">
+      <div class="uploader-hdr-title">Replace PDF</div>
+      <button class="uploader-close" onclick="closeUploader()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="uploader-body">
+      <!-- Drop zone -->
+      <div class="uploader-dropzone" id="uploader-dropzone"
+           onclick="document.getElementById('uploader-file-input').click()"
+           ondragover="uploaderDragOver(event)"
+           ondragleave="uploaderDragLeave(event)"
+           ondrop="uploaderDrop(event)">
+        <svg class="uploader-dropzone-icon" width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <path d="M12 16V4m0 0L8 8m4-4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <div class="uploader-dropzone-main">Click to upload or drag and drop</div>
+        <div class="uploader-dropzone-hint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          PDF • Max 5MB
+        </div>
+      </div>
+
+      <input type="file" id="uploader-file-input" accept=".pdf,application/pdf"
+             style="display:none" onchange="uploaderFileSelected(this.files[0])">
+
+      <!-- Selected file row (hidden until file chosen) -->
+      <div class="uploader-file-row" id="uploader-file-row" hidden>
+        <svg class="uploader-file-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+        <div class="uploader-file-info">
+          <div class="uploader-file-name" id="uploader-file-name">file.pdf</div>
+          <div class="uploader-file-size" id="uploader-file-size">0 KB</div>
+        </div>
+        <button class="uploader-file-remove" onclick="uploaderClearFile()" aria-label="Remove file">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Progress view (hidden until upload starts) -->
+      <div class="uploader-progress-wrap" id="uploader-progress-wrap" hidden>
+        <div class="up-progress-card">
+          <div class="up-progress-left">
+            <div class="up-bar-row">
+              <div class="up-bar-track">
+                <div class="up-bar-fill" id="up-bar-fill"></div>
+              </div>
+              <span class="up-pct" id="up-pct">0%</span>
+            </div>
+            <div class="up-file-info">
+              <div class="up-file-label-name" id="up-file-label-name">file.pdf</div>
+              <div class="up-file-label-size" id="up-file-label-size">0 KB</div>
+            </div>
+          </div>
+          <button class="up-cancel-link" onclick="closeUploader()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="uploader-ftr" id="uploader-ftr">
+      <button class="btn-secondary" id="uploader-cancel-btn" onclick="closeUploader()">Cancel</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Floating page preview panel -->
+<div class="page-preview-float" id="page-preview-float" aria-hidden="true">
+  <div id="page-preview-img-wrap"></div>
+  <div class="page-preview-footer">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#56595e" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M14 2v6h6" stroke="#56595e" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+    <span class="page-preview-name" id="page-preview-name">Page 1</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <path d="M5 12h14M13 6l6 6-6 6" stroke="#0a5546" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ═══ DELETE PAGE CONFIRMATION MODAL ═══════════════════════════ -->
+<div class="del-backdrop" id="del-backdrop" hidden aria-modal="true" role="dialog" aria-label="Delete page">
+  <div class="del-dialog">
+    <div class="del-hdr">
+      <div class="del-title" id="del-title">Delete Page 1?</div>
+      <button class="del-close" onclick="closeDelConfirm()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="del-body" id="del-body">
+      This will permanently remove Page 1 and all its blocks and links. This can't be undone.
+    </div>
+    <div class="del-ftr">
+      <button class="btn-secondary" onclick="closeDelConfirm()">Cancel</button>
+      <button class="btn-danger" onclick="delConfirmDelete()">Delete page</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PDF SAVED — APPLY TO OTHER FLYERS MODAL ══════════════════ -->
+<div class="pdf-saved-backdrop" id="pdf-saved-backdrop" hidden aria-modal="true" role="dialog" aria-label="PDF changes saved">
+  <div class="pdf-saved-dialog">
+
+    <div class="pdf-saved-hdr">
+      <div class="pdf-saved-title">Apply changes to other flyers?</div>
+      <button class="pdf-saved-close" onclick="closePdfSaved()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="pdf-saved-body">
+      <p class="pdf-saved-desc">12 other flyers share the same PDF pages. Select which ones to update.</p>
+
+      <div class="pdf-saved-checkboxes visible" id="pdf-saved-checkboxes">
+        <div class="pdf-saved-cb-row">
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">184 (1 store)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">587 (1 store)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">606 (1 store)</span></label>
+        </div>
+        <div class="pdf-saved-cb-row">
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">674 (1 store)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">709 (1 store)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">AL (3 stores)</span></label>
+        </div>
+        <div class="pdf-saved-cb-row">
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">AZ (48 stores)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">CO (34 stores)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">EL_PASO (3 stores)</span></label>
+        </div>
+        <div class="pdf-saved-cb-row">
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">FL (59 stores)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">GA (17 stores)</span></label>
+          <label class="pdf-saved-cb-item"><input type="checkbox" checked><span class="pdf-saved-cb-label">KS (4 stores)</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-saved-ftr">
+      <button class="btn-secondary" onclick="closePdfSaved()">No thanks</button>
+      <button class="btn-primary" id="pdf-saved-cta" onclick="confirmPdfSaved()">Update flyers</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ FLYER BUILDER SCREEN ══════════════════════════════════════ -->
+<div class="builder-screen" id="builder-screen" hidden>
+
+  <!-- Top nav -->
+  <nav class="top-nav" style="position:relative;flex-shrink:0;">
+    <div class="nav-left">
+      <button class="nav-btn" aria-label="Apps menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <rect x="3"  y="3"  width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+          <rect x="14" y="3"  width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+          <rect x="3"  y="14" width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.2" fill="white" opacity=".85"/>
+        </svg>
+      </button>
+      <div class="logo-text">instacart<em>platform</em></div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn" aria-label="Notifications">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="white"/>
+        </svg>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="nav-btn" aria-label="Search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99 1.49-1.49-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="white"/>
+        </svg>
+      </button>
+      <button class="nav-btn" aria-label="Help">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" fill="white"/>
+        </svg>
+      </button>
+      <button class="nav-btn" aria-label="Profile">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="white"/>
+        </svg>
+      </button>
+      <button class="partner-btn">
+        Fresh Grocery
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 6l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page header -->
+  <div class="builder-page-hdr">
+    <div class="builder-hdr-row">
+      <button class="builder-close-btn" onclick="closeBuilder()" aria-label="Close builder">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
+        <div class="builder-title">Weekly flyer: Feb 18, 2026 – Feb 24, 2026</div>
+        <span class="marker marker-neutral">Scheduled</span>
+      </div>
+      <div class="builder-hdr-actions">
+        <button class="btn-secondary" onclick="showToast('Opening preview…')">Preview flyer</button>
+        <button class="btn-primary" onclick="showToast('Changes saved.')">Save changes</button>
+      </div>
+    </div>
+    <div class="builder-filter-row">
+      <div class="builder-dropdown">
+        <div style="width:28px;height:22px;background:#358266;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><rect width="14" height="10" rx="1" fill="white" opacity=".3"/></svg>
+        </div>
+        Fresh Grocery
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="builder-dropdown" id="builder-version-dropdown">
+        <span id="builder-version-label">184 (1 store)</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="builder-body">
+
+    <!-- Left panel -->
+    <div class="builder-left">
+      <div class="builder-seg">
+        <button class="builder-seg-btn">Draw</button>
+        <button class="builder-seg-btn active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Move
+        </button>
+      </div>
+      <div class="builder-blocks-label">Blocks</div>
+      <div class="builder-block-item active">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+      </div>
+      <div class="builder-block-item">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+      </div>
+      <div class="builder-block-item">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+        <span class="builder-missing marker marker-warning" style="font-size:11px;padding:1px 5px">Missing link</span>
+      </div>
+      <div class="builder-block-item">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+      </div>
+      <div class="builder-block-item">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+      </div>
+      <div class="builder-block-item">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+      </div>
+      <div class="builder-block-item">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+      </div>
+      <div class="builder-block-item">
+        <div class="builder-block-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="1" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="1" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1" fill="currentColor"/></svg></div>
+        Block 450e4df9d84f98
+      </div>
+    </div>
+
+    <!-- Center canvas -->
+    <div class="builder-canvas-wrap">
+      <div class="builder-canvas-toolbar">
+        <div class="builder-canvas-toolbar-left">
+          <button class="builder-icon-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <span class="builder-page-label">Page</span>
+          <div class="builder-dropdown" style="height:40px;padding:0 12px;font-size:14px">9
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <span class="builder-page-label">of 12</span>
+          <button class="builder-icon-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="builder-canvas-toolbar-right">
+          <button class="builder-text-btn" onclick="openMpdf()">Manage PDF</button>
+          <button class="builder-icon-btn" title="Zoom out">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4M8 11h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="builder-icon-btn" title="Zoom in">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4-4M11 8v6M8 11h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="builder-text-btn">Zoom to fit</button>
+        </div>
+      </div>
+      <div class="builder-canvas">
+        <div class="builder-flyer-frame" id="builder-flyer-frame" style="background-image:url('https://www.figma.com/api/mcp/asset/6f781d28-34ad-442a-9bdc-5a00ef285601');background-size:cover;background-position:top left;">
+          <!-- Yellow block overlays -->
+          <div class="builder-block-overlay" style="left:212px;top:0;width:212px;height:159px"></div>
+          <div class="builder-block-overlay" style="left:0;top:159px;width:212px;height:159px"></div>
+          <div class="builder-block-overlay" style="left:212px;top:159px;width:212px;height:159px"></div>
+          <div class="builder-block-overlay" style="left:0;top:317px;width:212px;height:159px"></div>
+          <div class="builder-block-overlay" style="left:212px;top:317px;width:212px;height:159px"></div>
+          <div class="builder-block-overlay" style="left:0;top:476px;width:212px;height:159px"></div>
+          <div class="builder-block-overlay" style="left:212px;top:476px;width:212px;height:159px"></div>
+          <!-- Selected green block -->
+          <div class="builder-block-overlay selected" style="left:0;top:0;width:212px;height:159px">
+            <!-- Scissors action panel -->
+            <div class="builder-block-scissors">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="6" cy="6" r="3" stroke="white" stroke-width="1.8"/>
+                <circle cx="6" cy="18" r="3" stroke="white" stroke-width="1.8"/>
+                <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <!-- Label tag -->
+            <div style="position:absolute;bottom:-26px;right:-2px;background:#108910;height:26px;display:flex;align-items:center;gap:6px;padding:0 8px;border-radius:0 0 4px 4px;font-size:11px;color:white;font-weight:600;white-space:nowrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1" fill="white"/><rect x="3" y="14" width="7" height="7" rx="1" fill="white"/><rect x="14" y="14" width="7" height="7" rx="1" fill="white"/></svg>
+              Block 450e4df9d84f98
+            </div>
+            <!-- Resize handles -->
+            <div style="position:absolute;top:-5px;left:-5px;width:10px;height:10px;background:white;border:2px solid #108910;border-radius:50%"></div>
+            <div style="position:absolute;top:-5px;right:-5px;width:10px;height:10px;background:white;border:2px solid #108910;border-radius:50%"></div>
+            <div style="position:absolute;bottom:-5px;left:-5px;width:10px;height:10px;background:white;border:2px solid #108910;border-radius:50%"></div>
+            <div style="position:absolute;bottom:-5px;right:-5px;width:10px;height:10px;background:white;border:2px solid #108910;border-radius:50%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="builder-right">
+      <div class="builder-right-body">
+        <div>
+          <div class="builder-block-name">Block 450e4df9d84f98</div>
+          <span class="marker marker-neutral" style="margin-top:4px;display:inline-block">Saved</span>
+        </div>
+        <div class="builder-divider"></div>
+        <div>
+          <div class="builder-field-label">Destination</div>
+          <label class="builder-radio-row"><input type="radio" name="builder-dest" checked> Flyer data</label>
+          <label class="builder-radio-row"><input type="radio" name="builder-dest"> Collection</label>
+          <label class="builder-radio-row"><input type="radio" name="builder-dest"> Flyer page</label>
+          <label class="builder-radio-row" style="color:var(--gray-30)"><input type="radio" name="builder-dest" disabled> Recipe</label>
+          <label class="builder-radio-row"><input type="radio" name="builder-dest"> URL</label>
+        </div>
+        <div class="builder-divider"></div>
+        <div>
+          <div class="builder-field-label">Association</div>
+          <div class="builder-field-hint">Only products or groups of products found in the flyer data will appear here.</div>
+          <div class="builder-dropdown" style="width:100%;box-sizing:border-box;justify-content:space-between">
+            Organic orange
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <button class="btn-secondary" style="margin-top:8px;display:flex;align-items:center;gap:6px" onclick="showToast('Editing association…')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Edit association
+          </button>
+        </div>
+        <div class="builder-divider"></div>
+        <div>
+          <div class="builder-field-label">Bulk edit</div>
+          <label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;font-size:14px;color:var(--gray-80);line-height:20px">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--brand-regular)">
+            Apply changes to all flyers with a matching block
+          </label>
+        </div>
+      </div>
+      <div class="builder-right-ftr">
+        <button class="btn-danger" onclick="showToast('Block deleted.')">Delete block</button>
+        <button class="btn-primary" onclick="showToast('Block saved.')">Save</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Proto badge -->
+<div class="proto-badge">Flyer Detail · Prototype</div>
+
+<script>
+  // ── Edit mode toggle ──────────────────────────────────────────
+  const detailsSection = document.getElementById('flyer-details-section');
+  const editBtn        = document.getElementById('edit-btn');
+
+  function toggleEditMode() {
+    const isEditing = detailsSection.classList.toggle('is-editing');
+    if (isEditing) {
+      editBtn.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Save`;
+      updateCounter();
+      document.getElementById('flyer-title').focus();
+    } else {
+      editBtn.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Edit`;
+      // Sync view mode text with edited value
+      const val = document.getElementById('flyer-title').value || 'Weekly Ad';
+      detailsSection.querySelector('.field-value.view-mode').textContent = val;
+      showToast('Flyer details saved.');
+    }
+  }
+
+  // ── Char counter ──────────────────────────────────────────────
+  function updateCounter() {
+    const titleInput = document.getElementById('flyer-title');
+    const counter    = document.getElementById('char-count');
+    if (titleInput && counter) counter.textContent = titleInput.value.length + '/50';
+  }
+  document.getElementById('flyer-title').addEventListener('input', updateCounter);
+
+  function clearTitle() {
+    const inp = document.getElementById('flyer-title');
+    inp.value = '';
+    updateCounter();
+    inp.focus();
+  }
+
+  // ── Dropdown toggle ───────────────────────────────────────────
+  function toggleDropdown(id, btn) {
+    const menu   = document.getElementById(id);
+    const isOpen = menu.classList.contains('open');
+    closeAllDropdowns();
+    if (!isOpen) {
+      menu.classList.add('open');
+      btn.classList.add('active');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.overflow-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.overflow-wrap')) closeAllDropdowns();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeAllDropdowns();
+  });
+
+  // ── Preview accordion ─────────────────────────────────────────
+  function togglePreview(id) {
+    const num     = id.replace('pv', '');
+    const body    = document.getElementById(id);
+    const chevron = document.getElementById('ch' + num);
+    const row     = document.getElementById('pr' + num);
+    const isOpen  = body.classList.contains('open');
+
+    body.classList.toggle('open');
+    chevron.classList.toggle('open', !isOpen);
+    row.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  // ── Dismiss educational card ──────────────────────────────────
+  function dismissCard() {
+    document.getElementById('edu-card').classList.add('hidden');
+  }
+
+  // ── Manage PDF Modal ──────────────────────────────────────────
+  let mpdfPages        = [];
+  let mpdfDragIdx      = null;
+  let mpdfListenersSet = false;
+
+  function managePDF() { openMpdf(); }
+
+  function openMpdf() {
+    mpdfPages = Array.from({ length: 12 }, (_, i) => ({
+      num: i + 1,
+      layout: (i % 7) + 1,
+      visible: true,
+      updated: false
+    }));
+    renderMpdfGrid();
+    document.getElementById('mpdf-modal').removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    if (!mpdfListenersSet) { attachDragListeners(); mpdfListenersSet = true; }
+  }
+
+  function closeMpdf() {
+    document.getElementById('mpdf-modal').setAttribute('hidden', '');
+    document.body.style.overflow = '';
+  }
+
+  function saveMpdf() {
+    closeMpdf();
+    setTimeout(() => {
+      document.getElementById('pdf-saved-backdrop').removeAttribute('hidden');
+    }, 200);
+  }
+
+  function closePdfSaved() {
+    document.getElementById('pdf-saved-backdrop').setAttribute('hidden', '');
+  }
+
+  function confirmPdfSaved() {
+    const checked = document.querySelectorAll('#pdf-saved-checkboxes input[type="checkbox"]:checked');
+    closePdfSaved();
+    showToast('\u2713 PDF changes applied to ' + checked.length + ' flyers.');
+  }
+
+  function renderMpdfGrid() {
+    const grid    = document.getElementById('mpdf-grid');
+    const counter = document.getElementById('mpdf-count');
+    counter.textContent = mpdfPages.length;
+
+    const eyeOpen = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>`;
+    const eyeOff  = `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`;
+    const grabDots = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="5.5" cy="3.5"  r="1.3" fill="currentColor"/>
+      <circle cx="5.5" cy="8"    r="1.3" fill="currentColor"/>
+      <circle cx="5.5" cy="12.5" r="1.3" fill="currentColor"/>
+      <circle cx="10.5" cy="3.5"  r="1.3" fill="currentColor"/>
+      <circle cx="10.5" cy="8"    r="1.3" fill="currentColor"/>
+      <circle cx="10.5" cy="12.5" r="1.3" fill="currentColor"/>
+    </svg>`;
+
+    const cards = mpdfPages.map((pg, idx) => {
+      const svgIdx  = pg.layout;
+      const thumbSvg = PAGE_SVGS[svgIdx]
+        .replace('width="260" height="337"', 'width="153" height="230" preserveAspectRatio="xMidYMid slice"');
+      const hidCls   = pg.visible ? '' : ' hidden-pg';
+      const eyePath  = pg.visible ? eyeOpen : eyeOff;
+      const eyeLabel = pg.visible ? 'Hide page' : 'Show page';
+
+      return `
+        <div class="pc${hidCls}" data-midx="${idx}">
+          <div class="pc-thumb">
+            ${thumbSvg}
+            <div class="pc-overlay">
+              <button class="pc-ov-btn pc-ov-replace" onclick="mpdfReplace(event,${idx})">Replace PDF</button>
+              <button class="pc-ov-btn pc-ov-delete"  onclick="mpdfDelete(event,${idx})">Delete page</button>
+            </div>
+          </div>
+          <div class="pc-footer">
+            <div class="pc-grab">${grabDots}</div>
+            <span class="pc-label">Page ${pg.num}</span>
+            <button class="pc-eye" onclick="mpdfToggleVis(event,${idx})" aria-label="${eyeLabel}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">${eyePath}</svg>
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+
+    const addCard = `
+      <div class="pc-add" onclick="openUploader(null, 'Add new page')">
+        <div class="pc-add-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add new page
+        </div>
+      </div>`;
+
+    grid.innerHTML = cards + addCard;
+  }
+
+  function mpdfToggleVis(e, idx) {
+    e.stopPropagation();
+    mpdfPages[idx].visible = !mpdfPages[idx].visible;
+    renderMpdfGrid();
+  }
+
+  let delPendingIdx = null;
+
+  function mpdfDelete(e, idx) {
+    e.stopPropagation();
+    delPendingIdx = idx;
+    const pageNum = mpdfPages[idx].num;
+    document.getElementById('del-title').textContent = 'Delete Page ' + pageNum + '?';
+    document.getElementById('del-body').textContent = 'This will permanently remove Page ' + pageNum + ' and all its blocks and links. This can\'t be undone.';
+    document.getElementById('del-backdrop').removeAttribute('hidden');
+  }
+
+  function closeDelConfirm() {
+    document.getElementById('del-backdrop').setAttribute('hidden', '');
+    delPendingIdx = null;
+  }
+
+  function delConfirmDelete() {
+    if (delPendingIdx === null) return;
+    const name = 'Page ' + mpdfPages[delPendingIdx].num;
+    mpdfPages.splice(delPendingIdx, 1);
+    renderMpdfGrid();
+    closeDelConfirm();
+    showToast(name + ' deleted.');
+  }
+
+
+  function mpdfReplace(e, idx) {
+    e.stopPropagation();
+    openUploader(mpdfPages[idx].num);
+  }
+
+  // ── Replace PDF uploader modal ────────────────────────────────
+  let uploaderPageNum = null;
+
+  function openUploader(pageNum, title = 'Replace PDF') {
+    uploaderPageNum = pageNum;
+    document.querySelector('.uploader-hdr-title').textContent = title;
+
+    // Reset to idle state
+    document.getElementById('uploader-dropzone').style.display = '';
+    document.getElementById('uploader-progress-wrap').setAttribute('hidden', '');
+    document.getElementById('up-bar-fill').style.width = '0%';
+    document.getElementById('up-bar-fill').classList.remove('animating');
+    document.getElementById('up-pct').textContent = '0%';
+
+    // Reset footer
+    const ftr = document.getElementById('uploader-ftr');
+    ftr.hidden = false;
+    ftr.innerHTML = `<button class="btn-secondary" id="uploader-cancel-btn" onclick="closeUploader()">Cancel</button>`;
+
+    uploaderClearFile();
+    document.getElementById('uploader-backdrop').removeAttribute('hidden');
+  }
+
+  function closeUploader() {
+    document.getElementById('uploader-backdrop').setAttribute('hidden', '');
+    uploaderPageNum = null;
+  }
+
+  function uploaderDragOver(e) {
+    e.preventDefault();
+    document.getElementById('uploader-dropzone').classList.add('drag-over');
+  }
+
+  function uploaderDragLeave(e) {
+    document.getElementById('uploader-dropzone').classList.remove('drag-over');
+  }
+
+  function uploaderDrop(e) {
+    e.preventDefault();
+    document.getElementById('uploader-dropzone').classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) uploaderFileSelected(file);
+  }
+
+  function uploaderFileSelected(file) {
+    if (!file) return;
+    const mb = file.size / 1024 / 1024;
+    const sizeStr = mb >= 1 ? mb.toFixed(1) + ' MB' : Math.round(file.size / 1024) + ' KB';
+
+    // Copy file info into progress view
+    document.getElementById('up-file-label-name').textContent = file.name;
+    document.getElementById('up-file-label-size').textContent = sizeStr;
+    // Hide upload form, show progress
+    document.getElementById('uploader-dropzone').style.display = 'none';
+    document.getElementById('uploader-progress-wrap').removeAttribute('hidden');
+
+    // Hide footer (cancel is inside the progress card)
+    document.getElementById('uploader-ftr').hidden = true;
+
+    // Animate progress with shimmer
+    let pct = 0;
+    const fill     = document.getElementById('up-bar-fill');
+    const pctLabel = document.getElementById('up-pct');
+    fill.classList.add('animating');
+
+    const tick = setInterval(() => {
+      const step = pct < 70 ? 4 : pct < 90 ? 1.5 : 0.5;
+      pct = Math.min(pct + step, 99);
+      fill.style.width = pct + '%';
+      pctLabel.textContent = Math.round(pct) + '%';
+    }, 80);
+
+    // Complete after ~2.4s
+    setTimeout(() => {
+      clearInterval(tick);
+      fill.classList.remove('animating');
+      fill.style.width = '100%';
+      pctLabel.textContent = '100%';
+
+      setTimeout(() => {
+        const name = file.name;
+        if (uploaderPageNum === null) {
+          // Add new page
+          const newNum = mpdfPages.length > 0 ? Math.max(...mpdfPages.map(p => p.num)) + 1 : 1;
+          mpdfPages.push({ num: newNum, layout: (newNum % 7) || 7, visible: true });
+          closeUploader();
+          renderMpdfGrid();
+          showToast('\u2713 Page ' + newNum + ' added.');
+        } else {
+          // Replace existing page
+          closeUploader();
+          renderMpdfGrid();
+          showToast('\u2713 Page ' + uploaderPageNum + ' replaced with ' + name);
+        }
+      }, 400);
+    }, 2400);
+  }
+
+  function uploaderClearFile() {
+    document.getElementById('uploader-file-input').value = '';
+  }
+
+  // ── Drag and drop (event delegation on grid container) ───────
+  function attachDragListeners() {
+    const grid = document.getElementById('mpdf-grid');
+    let ds = null; // drag state
+
+    grid.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      if (e.target.closest('button')) return;
+      const card = e.target.closest('.pc');
+      if (!card) return;
+      ds = {
+        idx: parseInt(card.dataset.midx),
+        card,
+        startX: e.clientX,
+        startY: e.clientY,
+        active: false,
+        ghost: null,
+        dropIdx: null,
+        dropSide: null
+      };
+      e.preventDefault();
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+
+    function onMove(e) {
+      if (!ds) return;
+      const dx = e.clientX - ds.startX;
+      const dy = e.clientY - ds.startY;
+      if (!ds.active && Math.sqrt(dx * dx + dy * dy) < 6) return;
+
+      if (!ds.active) {
+        ds.active = true;
+        // Create ghost
+        const ghost = ds.card.cloneNode(true);
+        ghost.style.cssText = `
+          position: fixed;
+          pointer-events: none;
+          z-index: 9999;
+          opacity: 0.85;
+          transform: rotate(2deg) scale(1.03);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+          transition: none;
+          width: ${ds.card.offsetWidth}px;
+        `;
+        const r = ds.card.getBoundingClientRect();
+        ghost.style.left = r.left + 'px';
+        ghost.style.top  = r.top  + 'px';
+        document.body.appendChild(ghost);
+        ds.ghost = ghost;
+        ds.offX = e.clientX - r.left;
+        ds.offY = e.clientY - r.top;
+        ds.card.style.opacity = '0.3';
+      }
+
+      // Move ghost
+      ds.ghost.style.left = (e.clientX - ds.offX) + 'px';
+      ds.ghost.style.top  = (e.clientY - ds.offY) + 'px';
+
+      // Find drop target
+      const cards = Array.from(grid.querySelectorAll('.pc'));
+      let dropIdx = null, dropSide = null;
+      for (const c of cards) {
+        const idx = parseInt(c.dataset.midx);
+        if (idx === ds.idx) continue;
+        const r = c.getBoundingClientRect();
+        if (e.clientX >= r.left - 12 && e.clientX <= r.right + 12 &&
+            e.clientY >= r.top - 12 && e.clientY <= r.bottom + 12) {
+          dropIdx  = idx;
+          dropSide = e.clientX < r.left + r.width / 2 ? 'left' : 'right';
+          break;
+        }
+      }
+
+      // Update indicators
+      cards.forEach(c => c.classList.remove('drop-left', 'drop-right'));
+      if (dropIdx !== null) {
+        const tc = cards.find(c => parseInt(c.dataset.midx) === dropIdx);
+        if (tc) tc.classList.add(dropSide === 'left' ? 'drop-left' : 'drop-right');
+      }
+      ds.dropIdx  = dropIdx;
+      ds.dropSide = dropSide;
+    }
+
+    function onUp() {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      if (!ds) return;
+
+      if (ds.active && ds.dropIdx !== null) {
+        const before = ds.dropSide === 'left';
+        const [moved] = mpdfPages.splice(ds.idx, 1);
+        let insertAt = before ? ds.dropIdx : ds.dropIdx + 1;
+        if (ds.idx < ds.dropIdx) insertAt--;
+        insertAt = Math.max(0, Math.min(insertAt, mpdfPages.length));
+        mpdfPages.splice(insertAt, 0, moved);
+        mpdfPages.forEach((pg, i) => pg.num = i + 1);
+        renderMpdfGrid();
+      } else {
+        // No drop — restore opacity
+        if (ds.card && ds.card.isConnected) ds.card.style.opacity = '';
+        grid.querySelectorAll('.pc').forEach(c => c.classList.remove('drop-left', 'drop-right'));
+      }
+
+      if (ds.ghost) ds.ghost.remove();
+      ds = null;
+    }
+  }
+
+  function cleanDrag() {
+    document.querySelectorAll('#mpdf-grid .pc').forEach(c => {
+      c.classList.remove('drop-left', 'drop-right');
+      c.style.opacity = '';
+    });
+  }
+
+  // ── Floating page preview ─────────────────────────────────────
+  const previewFloat  = document.getElementById('page-preview-float');
+  const previewName   = document.getElementById('page-preview-name');
+  const previewImgWrap = document.getElementById('page-preview-img-wrap');
+
+  // 7 distinct flyer page layouts
+  const PAGE_SVGS = {
+    // Layout 1 — 2-col product grid + banner
+    1: `<svg width="260" height="337" viewBox="0 0 260 337" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="337" fill="#f6f7f8"/>
+      <rect width="260" height="52" fill="#003d29"/>
+      <rect x="20" y="18" width="72" height="14" rx="2" fill="white" opacity=".9"/>
+      <rect x="100" y="20" width="44" height="10" rx="2" fill="#a3d977" opacity=".8"/>
+      <rect x="152" y="20" width="88" height="10" rx="2" fill="white" opacity=".3"/>
+      <rect x="8"   y="60" width="116" height="126" rx="4" fill="white"/>
+      <rect x="136" y="60" width="116" height="126" rx="4" fill="white"/>
+      <rect x="24"  y="72" width="84" height="72" rx="4" fill="#ecf6f3"/>
+      <rect x="24" y="150" width="56" height="9"  rx="2" fill="#e8e9eb"/>
+      <rect x="24" y="163" width="36" height="13" rx="2" fill="#0a5546"/>
+      <rect x="152" y="72" width="84" height="72" rx="4" fill="#fef0f0"/>
+      <rect x="152" y="150" width="56" height="9"  rx="2" fill="#e8e9eb"/>
+      <rect x="152" y="163" width="36" height="13" rx="2" fill="#de3534"/>
+      <rect x="8"   y="194" width="76" height="76" rx="4" fill="white"/>
+      <rect x="92"  y="194" width="76" height="76" rx="4" fill="white"/>
+      <rect x="176" y="194" width="76" height="76" rx="4" fill="white"/>
+      <rect x="18"  y="202" width="56" height="52" rx="3" fill="#fcf7f1"/>
+      <rect x="102" y="202" width="56" height="52" rx="3" fill="#ecf6f3"/>
+      <rect x="186" y="202" width="56" height="52" rx="3" fill="#f6f7f8"/>
+      <rect x="18"  y="258" width="36" height="8" rx="2" fill="#0a5546"/>
+      <rect x="102" y="258" width="36" height="8" rx="2" fill="#0a5546"/>
+      <rect x="186" y="258" width="36" height="8" rx="2" fill="#56595e"/>
+      <rect x="8"   y="278" width="244" height="52" rx="4" fill="#ecf6f3"/>
+      <rect x="20"  y="292" width="100" height="10" rx="2" fill="#0a5546" opacity=".5"/>
+      <rect x="20"  y="308" width="64"  height="12" rx="2" fill="#0a5546"/>
+    </svg>`,
+
+    // Layout 2 — Large feature item + 3-col small items
+    2: `<svg width="260" height="337" viewBox="0 0 260 337" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="337" fill="#f6f7f8"/>
+      <rect width="260" height="52" fill="#003d29"/>
+      <rect x="20" y="18" width="72" height="14" rx="2" fill="white" opacity=".9"/>
+      <rect x="100" y="20" width="44" height="10" rx="2" fill="#a3d977" opacity=".8"/>
+      <rect x="8"   y="60" width="244" height="140" rx="4" fill="white"/>
+      <rect x="20"  y="72" width="116" height="100" rx="4" fill="#ecf6f3"/>
+      <rect x="148" y="72"  width="92" height="18" rx="2" fill="#e8e9eb"/>
+      <rect x="148" y="96"  width="76" height="12" rx="2" fill="#e8e9eb"/>
+      <rect x="148" y="114" width="56" height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="148" y="134" width="68" height="24" rx="4" fill="#0a5546"/>
+      <rect x="148" y="164" width="48" height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="8"   y="208" width="76" height="84" rx="4" fill="white"/>
+      <rect x="92"  y="208" width="76" height="84" rx="4" fill="white"/>
+      <rect x="176" y="208" width="76" height="84" rx="4" fill="white"/>
+      <rect x="18"  y="218" width="56" height="48" rx="3" fill="#ecf6f3"/>
+      <rect x="102" y="218" width="56" height="48" rx="3" fill="#fef0f0"/>
+      <rect x="186" y="218" width="56" height="48" rx="3" fill="#fcf7f1"/>
+      <rect x="18"  y="272" width="36" height="10" rx="2" fill="#0a5546"/>
+      <rect x="102" y="272" width="36" height="10" rx="2" fill="#de3534"/>
+      <rect x="186" y="272" width="36" height="10" rx="2" fill="#0a5546"/>
+      <rect x="8"   y="300" width="244" height="32" rx="4" fill="#ecf6f3"/>
+      <rect x="20"  y="312" width="80" height="8"  rx="2" fill="#0a5546" opacity=".5"/>
+    </svg>`,
+
+    // Layout 3 — Horizontal deal strips
+    3: `<svg width="260" height="337" viewBox="0 0 260 337" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="337" fill="#f6f7f8"/>
+      <rect width="260" height="52" fill="#003d29"/>
+      <rect x="20" y="18" width="72" height="14" rx="2" fill="white" opacity=".9"/>
+      <rect x="8"   y="60" width="244" height="60" rx="4" fill="white"/>
+      <rect x="16"  y="70" width="44" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="68"  y="76" width="80" height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="68"  y="90" width="56" height="8"  rx="2" fill="#e8e9eb"/>
+      <rect x="196" y="74" width="48" height="18" rx="2" fill="#0a5546"/>
+      <rect x="8"   y="128" width="244" height="60" rx="4" fill="white"/>
+      <rect x="16"  y="138" width="44" height="40" rx="3" fill="#fef0f0"/>
+      <rect x="68"  y="144" width="80" height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="68"  y="158" width="56" height="8"  rx="2" fill="#e8e9eb"/>
+      <rect x="196" y="142" width="48" height="18" rx="2" fill="#de3534"/>
+      <rect x="8"   y="196" width="244" height="60" rx="4" fill="white"/>
+      <rect x="16"  y="206" width="44" height="40" rx="3" fill="#fcf7f1"/>
+      <rect x="68"  y="212" width="80" height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="68"  y="226" width="56" height="8"  rx="2" fill="#e8e9eb"/>
+      <rect x="196" y="210" width="48" height="18" rx="2" fill="#0a5546"/>
+      <rect x="8"   y="264" width="244" height="60" rx="4" fill="white"/>
+      <rect x="16"  y="274" width="44" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="68"  y="280" width="80" height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="68"  y="294" width="56" height="8"  rx="2" fill="#e8e9eb"/>
+      <rect x="196" y="278" width="48" height="18" rx="2" fill="#0a5546"/>
+    </svg>`,
+
+    // Layout 4 — Dense 4-column grid (3 rows)
+    4: `<svg width="260" height="337" viewBox="0 0 260 337" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="337" fill="#f6f7f8"/>
+      <rect width="260" height="52" fill="#003d29"/>
+      <rect x="20" y="18" width="72" height="14" rx="2" fill="white" opacity=".9"/>
+      <rect x="8"  y="60" width="120" height="12" rx="2" fill="#e8e9eb"/>
+      <rect x="8"  y="80"  width="56" height="68" rx="4" fill="white"/>
+      <rect x="72" y="80"  width="56" height="68" rx="4" fill="white"/>
+      <rect x="136" y="80" width="56" height="68" rx="4" fill="white"/>
+      <rect x="200" y="80" width="52" height="68" rx="4" fill="white"/>
+      <rect x="16"  y="88" width="40" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="80"  y="88" width="40" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="144" y="88" width="40" height="40" rx="3" fill="#fef0f0"/>
+      <rect x="208" y="88" width="36" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="16"  y="134" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="80"  y="134" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="144" y="134" width="28" height="8" rx="2" fill="#de3534"/>
+      <rect x="208" y="134" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="8"   y="156" width="56" height="68" rx="4" fill="white"/>
+      <rect x="72"  y="156" width="56" height="68" rx="4" fill="white"/>
+      <rect x="136" y="156" width="56" height="68" rx="4" fill="white"/>
+      <rect x="200" y="156" width="52" height="68" rx="4" fill="white"/>
+      <rect x="16"  y="164" width="40" height="40" rx="3" fill="#fcf7f1"/>
+      <rect x="80"  y="164" width="40" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="144" y="164" width="40" height="40" rx="3" fill="#fcf7f1"/>
+      <rect x="208" y="164" width="36" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="16"  y="210" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="80"  y="210" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="144" y="210" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="208" y="210" width="28" height="8" rx="2" fill="#de3534"/>
+      <rect x="8"   y="232" width="56" height="68" rx="4" fill="white"/>
+      <rect x="72"  y="232" width="56" height="68" rx="4" fill="white"/>
+      <rect x="136" y="232" width="56" height="68" rx="4" fill="white"/>
+      <rect x="200" y="232" width="52" height="68" rx="4" fill="white"/>
+      <rect x="16"  y="240" width="40" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="80"  y="240" width="40" height="40" rx="3" fill="#fef0f0"/>
+      <rect x="144" y="240" width="40" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="208" y="240" width="36" height="40" rx="3" fill="#f6f7f8"/>
+      <rect x="16"  y="286" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="80"  y="286" width="28" height="8" rx="2" fill="#de3534"/>
+      <rect x="144" y="286" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="208" y="286" width="28" height="8" rx="2" fill="#56595e"/>
+      <rect x="8"   y="308" width="244" height="20" rx="2" fill="#e8e9eb" opacity=".6"/>
+    </svg>`,
+
+    // Layout 5 — Red sale banner + featured item + 2-col bottom
+    5: `<svg width="260" height="337" viewBox="0 0 260 337" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="337" fill="#f6f7f8"/>
+      <rect width="260" height="52" fill="#003d29"/>
+      <rect x="20" y="18" width="72" height="14" rx="2" fill="white" opacity=".9"/>
+      <rect x="8"   y="60" width="244" height="80" rx="4" fill="#de3534"/>
+      <rect x="20"  y="76" width="140" height="16" rx="2" fill="white" opacity=".9"/>
+      <rect x="20"  y="97"  width="96" height="12" rx="2" fill="white" opacity=".6"/>
+      <rect x="180" y="64"  width="64" height="64" rx="32" fill="white" opacity=".12"/>
+      <rect x="192" y="80"  width="40" height="18" rx="2" fill="white" opacity=".9"/>
+      <rect x="196" y="103" width="32" height="10" rx="2" fill="white" opacity=".6"/>
+      <rect x="8"   y="148" width="244" height="120" rx="4" fill="white"/>
+      <rect x="20"  y="160" width="100" height="88" rx="4" fill="#ecf6f3"/>
+      <rect x="132" y="164" width="100" height="14" rx="2" fill="#e8e9eb"/>
+      <rect x="132" y="182" width="80"  height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="132" y="196" width="60"  height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="132" y="218" width="72"  height="24" rx="4" fill="#de3534"/>
+      <rect x="132" y="250" width="44"  height="10" rx="2" fill="#e8e9eb"/>
+      <rect x="8"   y="276" width="120" height="52" rx="4" fill="white"/>
+      <rect x="136" y="276" width="116" height="52" rx="4" fill="white"/>
+      <rect x="16"  y="284" width="36" height="36" rx="3" fill="#ecf6f3"/>
+      <rect x="56"  y="290" width="60" height="8"  rx="2" fill="#e8e9eb"/>
+      <rect x="56"  y="302" width="36" height="10" rx="2" fill="#0a5546"/>
+      <rect x="144" y="284" width="36" height="36" rx="3" fill="#fef0f0"/>
+      <rect x="184" y="290" width="56" height="8"  rx="2" fill="#e8e9eb"/>
+      <rect x="184" y="302" width="36" height="10" rx="2" fill="#de3534"/>
+    </svg>`,
+
+    // Layout 6 — 1 big left + 2 small right + 4-col bottom
+    6: `<svg width="260" height="337" viewBox="0 0 260 337" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="337" fill="#f6f7f8"/>
+      <rect width="260" height="52" fill="#003d29"/>
+      <rect x="20"  y="18" width="72" height="14" rx="2" fill="white" opacity=".9"/>
+      <rect x="160" y="20" width="80" height="10" rx="2" fill="white" opacity=".3"/>
+      <rect x="8"   y="60"  width="144" height="158" rx="4" fill="white"/>
+      <rect x="20"  y="72"  width="120" height="104" rx="4" fill="#ecf6f3"/>
+      <rect x="20"  y="182" width="56"  height="10"  rx="2" fill="#e8e9eb"/>
+      <rect x="20"  y="196" width="40"  height="16"  rx="2" fill="#0a5546"/>
+      <rect x="160" y="60"  width="92"  height="76"  rx="4" fill="white"/>
+      <rect x="168" y="68"  width="76"  height="48"  rx="3" fill="#fef0f0"/>
+      <rect x="168" y="122" width="40"  height="8"   rx="2" fill="#de3534"/>
+      <rect x="160" y="142" width="92"  height="76"  rx="4" fill="white"/>
+      <rect x="168" y="150" width="76"  height="48"  rx="3" fill="#fcf7f1"/>
+      <rect x="168" y="204" width="40"  height="8"   rx="2" fill="#0a5546"/>
+      <rect x="8"   y="226" width="56" height="68" rx="4" fill="white"/>
+      <rect x="72"  y="226" width="56" height="68" rx="4" fill="white"/>
+      <rect x="136" y="226" width="56" height="68" rx="4" fill="white"/>
+      <rect x="200" y="226" width="52" height="68" rx="4" fill="white"/>
+      <rect x="16"  y="234" width="40" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="80"  y="234" width="40" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="144" y="234" width="40" height="40" rx="3" fill="#fef0f0"/>
+      <rect x="208" y="234" width="36" height="40" rx="3" fill="#ecf6f3"/>
+      <rect x="16"  y="280" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="80"  y="280" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="144" y="280" width="28" height="8" rx="2" fill="#de3534"/>
+      <rect x="208" y="280" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="8"   y="302" width="244" height="28" rx="4" fill="#ecf6f3"/>
+      <rect x="20"  y="314" width="80"  height="8"  rx="2" fill="#0a5546" opacity=".4"/>
+    </svg>`,
+
+    // Layout 7 — Organic/produce (light green theme)
+    7: `<svg width="260" height="337" viewBox="0 0 260 337" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="337" fill="#f5fbf9"/>
+      <rect width="260" height="52" fill="#0a5546"/>
+      <rect x="20"  y="18" width="72" height="14" rx="2" fill="white" opacity=".9"/>
+      <rect x="100" y="20" width="44" height="10" rx="2" fill="#a3d977" opacity=".8"/>
+      <rect x="8"   y="60"  width="244" height="104" rx="4" fill="white"/>
+      <rect x="20"  y="72"  width="80"  height="80"  rx="4" fill="#e9fbe9"/>
+      <rect x="112" y="76"  width="120" height="14"  rx="2" fill="#e8e9eb"/>
+      <rect x="112" y="94"  width="96"  height="10"  rx="2" fill="#e8e9eb"/>
+      <rect x="112" y="108" width="60"  height="10"  rx="2" fill="#e8e9eb"/>
+      <rect x="112" y="128" width="80"  height="24"  rx="4" fill="#0a5546"/>
+      <rect x="8"   y="172" width="120" height="80" rx="4" fill="white"/>
+      <rect x="136" y="172" width="116" height="80" rx="4" fill="white"/>
+      <rect x="16"  y="180" width="104" height="52" rx="3" fill="#e9fbe9"/>
+      <rect x="144" y="180" width="100" height="52" rx="3" fill="#ecf6f3"/>
+      <rect x="16"  y="238" width="56"  height="10" rx="2" fill="#0a5546"/>
+      <rect x="144" y="238" width="56"  height="10" rx="2" fill="#0a5546"/>
+      <rect x="8"   y="260" width="56" height="64" rx="4" fill="white"/>
+      <rect x="72"  y="260" width="56" height="64" rx="4" fill="white"/>
+      <rect x="136" y="260" width="56" height="64" rx="4" fill="white"/>
+      <rect x="200" y="260" width="52" height="64" rx="4" fill="white"/>
+      <rect x="16"  y="268" width="40" height="36" rx="3" fill="#e9fbe9"/>
+      <rect x="80"  y="268" width="40" height="36" rx="3" fill="#e9fbe9"/>
+      <rect x="144" y="268" width="40" height="36" rx="3" fill="#ecf6f3"/>
+      <rect x="208" y="268" width="36" height="36" rx="3" fill="#e9fbe9"/>
+      <rect x="16"  y="310" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="80"  y="310" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="144" y="310" width="28" height="8" rx="2" fill="#0a5546"/>
+      <rect x="208" y="310" width="28" height="8" rx="2" fill="#0a5546"/>
+    </svg>`,
+  };
+
+  document.addEventListener('mouseover', function(e) {
+    const row = e.target.closest('.page-row');
+    if (!row) return;
+
+    const nameEl = row.querySelector('.page-name');
+    previewName.textContent = nameEl ? nameEl.textContent.trim() : 'Page';
+
+    // Pick SVG layout based on page number (cycles through 7 layouts)
+    const pageNum  = parseInt((nameEl ? nameEl.textContent : '1').replace(/\D/g,'')) || 1;
+    const svgIndex = ((pageNum - 1) % 7) + 1;
+    previewImgWrap.innerHTML = PAGE_SVGS[svgIndex];
+
+    const rect    = row.getBoundingClientRect();
+    const panelH  = 375; // approx height of panel
+    let left = rect.right + 16;
+    let top  = rect.top - 40;
+
+    // Clamp within viewport
+    top  = Math.max(80, Math.min(top, window.innerHeight - panelH - 16));
+    // If not enough room on the right, show on the left
+    if (left + 260 > window.innerWidth - 8) left = rect.left - 260 - 16;
+
+    previewFloat.style.left = left + 'px';
+    previewFloat.style.top  = top  + 'px';
+    previewFloat.classList.add('visible');
+  });
+
+  document.addEventListener('mouseout', function(e) {
+    const row = e.target.closest('.page-row');
+    if (!row) return;
+    if (row.contains(e.relatedTarget)) return;
+    previewFloat.classList.remove('visible');
+  });
+
+  // ── Builder screen ────────────────────────────────────────────
+  function openBuilder(versionName) {
+    document.getElementById('builder-version-label').textContent = versionName;
+    document.getElementById('builder-screen').removeAttribute('hidden');
+  }
+  function closeBuilder() {
+    document.getElementById('builder-screen').setAttribute('hidden', '');
+  }
+
+  // ── Toast notification ────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg) {
+    clearTimeout(toastTimer);
+    const toast    = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-msg');
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+</script>
+
+</body>
+</html>
