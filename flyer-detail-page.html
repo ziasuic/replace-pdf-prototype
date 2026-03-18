@@ -822,6 +822,14 @@
       transition: background 0.12s;
     }
     .btn-danger:hover { background: #b8271e; }
+    .btn-danger-secondary {
+      height: 36px; padding: 0 16px;
+      background: transparent; color: #d93025;
+      border: 1.5px solid #d93025; border-radius: 8px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      white-space: nowrap; transition: all 0.15s;
+    }
+    .btn-danger-secondary:hover { background: rgba(217,48,37,0.06); }
 
     /* ─── PDF Saved / apply-to-others modal ───────────────────── */
     @keyframes pdf-saved-fade-in {
@@ -1948,6 +1956,27 @@
   </div>
 </div>
 
+<!-- ═══ DISCARD CHANGES CONFIRMATION ════════════════════════════ -->
+<div class="del-backdrop" id="mpdf-discard-backdrop" hidden aria-modal="true" role="dialog">
+  <div class="del-dialog">
+    <div class="del-hdr">
+      <div class="del-title">Save before closing?</div>
+      <button class="del-close" onclick="document.getElementById('mpdf-discard-backdrop').setAttribute('hidden','')" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="del-body">
+      You have unsaved changes. If you leave now, your changes will be lost.
+    </div>
+    <div class="del-ftr">
+      <button class="btn-danger-secondary" onclick="_doCloseMpdf()">Discard changes</button>
+      <button class="btn-primary" onclick="document.getElementById('mpdf-discard-backdrop').setAttribute('hidden',''); saveMpdf()">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ PDF SAVED — APPLY TO OTHER FLYERS MODAL ══════════════════ -->
 <div class="pdf-saved-backdrop" id="pdf-saved-backdrop" hidden aria-modal="true" role="dialog" aria-label="PDF changes saved">
   <div class="pdf-saved-dialog">
@@ -2327,6 +2356,7 @@
 
   // ── Manage PDF Modal ──────────────────────────────────────────
   let mpdfPages        = [];
+  let mpdfDirty        = false;
   let mpdfDragIdx      = null;
   let mpdfListenersSet = false;
 
@@ -2339,6 +2369,7 @@
       visible: true,
       updated: false
     }));
+    mpdfDirty = false;
     renderMpdfGrid();
     document.getElementById('mpdf-modal').removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
@@ -2346,12 +2377,22 @@
   }
 
   function closeMpdf() {
+    if (mpdfDirty) {
+      document.getElementById('mpdf-discard-backdrop').removeAttribute('hidden');
+      return;
+    }
+    _doCloseMpdf();
+  }
+
+  function _doCloseMpdf() {
     document.getElementById('mpdf-modal').setAttribute('hidden', '');
+    document.getElementById('mpdf-discard-backdrop').setAttribute('hidden', '');
     document.body.style.overflow = '';
+    mpdfDirty = false;
   }
 
   function saveMpdf() {
-    closeMpdf();
+    _doCloseMpdf();
     setTimeout(() => {
       document.getElementById('pdf-saved-backdrop').removeAttribute('hidden');
     }, 200);
@@ -2426,6 +2467,7 @@
   function mpdfToggleVis(e, idx) {
     e.stopPropagation();
     mpdfPages[idx].visible = !mpdfPages[idx].visible;
+    mpdfDirty = true;
     renderMpdfGrid();
   }
 
@@ -2449,6 +2491,7 @@
     if (delPendingIdx === null) return;
     const name = 'Page ' + mpdfPages[delPendingIdx].num;
     mpdfPages.splice(delPendingIdx, 1);
+    mpdfDirty = true;
     renderMpdfGrid();
     closeDelConfirm();
     showToast(name + ' deleted.');
@@ -2545,11 +2588,13 @@
           // Add new page
           const newNum = mpdfPages.length > 0 ? Math.max(...mpdfPages.map(p => p.num)) + 1 : 1;
           mpdfPages.push({ num: newNum, layout: (newNum % 7) || 7, visible: true });
+          mpdfDirty = true;
           closeUploader();
           renderMpdfGrid();
           showToast('\u2713 Page ' + newNum + ' added.');
         } else {
           // Replace existing page
+          mpdfDirty = true;
           closeUploader();
           renderMpdfGrid();
           showToast('\u2713 Page ' + uploaderPageNum + ' replaced with ' + name);
@@ -2659,6 +2704,7 @@
         insertAt = Math.max(0, Math.min(insertAt, mpdfPages.length));
         mpdfPages.splice(insertAt, 0, moved);
         mpdfPages.forEach((pg, i) => pg.num = i + 1);
+        mpdfDirty = true;
         renderMpdfGrid();
       } else {
         // No drop — restore opacity
