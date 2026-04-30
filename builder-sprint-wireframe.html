@@ -909,6 +909,145 @@
   .lp-preview-line { height: 6px; background: #E8E6E0; border-radius: 3px; }
   .lp-preview-btn { height: 18px; width: 60px; background: #185FA5; border-radius: 4px; }
 
+  /* ─── Empty section ─────────────────────────────────── */
+  .ps-empty {
+    border: 2px dashed #378ADD;
+    border-radius: 10px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(55,138,221,0.04);
+    position: relative;
+    margin-bottom: 0;
+    box-shadow: 0 0 0 3px rgba(55,138,221,0.12);
+  }
+  .ps-empty-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #378ADD;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .ps-empty-hint {
+    font-size: 11px;
+    color: #888780;
+  }
+  .ps-empty-blocks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+    min-height: 20px;
+  }
+  .ps-empty-add-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid #378ADD;
+    background: #fff;
+    color: #185FA5;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s;
+    pointer-events: none;
+  }
+  .ps-empty:hover .ps-empty-add-btn.picker-closed { opacity: 1; pointer-events: auto; }
+  .ps-empty-add-btn:hover { background: #EEF4FB; }
+  .ps-empty-block-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    font-size: 11px;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+
+  /* ─── Block picker panel ──────────────────────────────── */
+  .block-picker {
+    position: absolute;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+    width: 220px;
+    z-index: 200;
+    overflow: hidden;
+    display: none;
+  }
+  .block-picker.open { display: block; }
+  .block-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid #EEECEA;
+    background: #fff;
+  }
+  .block-picker-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .block-picker-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .block-picker-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid #D3D1C7;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #5F5E5A;
+    font-size: 12px;
+    transition: background 0.12s;
+  }
+  .block-picker-btn:hover { background: #F5F4F0; }
+  .block-picker-body {
+    padding: 10px 12px 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .block-picker-body.minimized { display: none; }
+  .block-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 6px;
+    border-radius: 7px;
+    border: 1px solid #EEECEA;
+    background: #F5F4F0;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+    text-align: center;
+  }
+  .block-item:hover { border-color: #185FA5; background: #EEF4FB; }
+  .block-item-icon { color: #5F5E5A; }
+  .block-item-label { font-size: 10px; color: #1a1a1a; font-weight: 500; }
+
   /* ─── Add entry point ───────────────────────────────── */
   .add-block {
     display: flex;
@@ -2049,7 +2188,7 @@
               </div>
               <div class="custom-entry-text">
                 <div class="custom-entry-title">Pre-built element</div>
-                <div class="custom-entry-sub">Browse and add curated elements</div>
+                <div class="custom-entry-sub">Pick from curated layouts and sections</div>
               </div>
               <span class="custom-entry-arrow">›</span>
             </div>
@@ -2186,7 +2325,7 @@
       </div>
 
       <!-- Add: between hero and featured -->
-      <div class="add-block" onclick="addBlockClick(event)">
+      <div class="add-block" onclick="document.querySelectorAll('.add-block').forEach(function(b){b.classList.remove('bp-target')});this.classList.add('bp-target');switchNav('add')">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         Add
       </div>
@@ -2214,7 +2353,7 @@
       </div>
 
       <!-- Add: between featured and promotions -->
-      <div class="add-block" onclick="addBlockClick(event)">
+      <div class="add-block" onclick="document.querySelectorAll('.add-block').forEach(function(b){b.classList.remove('bp-target')});this.classList.add('bp-target');switchNav('add')">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         Add
       </div>
@@ -2242,7 +2381,7 @@
       </div>
 
       <!-- Add: after promotions -->
-      <div class="add-block" onclick="addBlockClick(event)">
+      <div class="add-block" onclick="document.querySelectorAll('.add-block').forEach(function(b){b.classList.remove('bp-target')});this.classList.add('bp-target');switchNav('add')">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         Add
       </div>
@@ -2534,9 +2673,110 @@
     showToast('"' + title + '" saved to library');
   }
 
-  // ── Custom tab entry point stubs ─────────────────────────────
+  // ── Empty section + block picker ─────────────────────────────
+  var activeEmptySection = null;
+  var bpMinimized = false;
+
   function addEmptySection() {
-    showToast('Empty section created — add blocks to build it out');
+    // Close the left Add panel
+    var lpanel = document.getElementById('lpanel');
+    lpanel.classList.remove('open');
+    setNavActive(null);
+    state = 'default';
+
+    // Find target: last-clicked add-block or first one
+    var addBlocks = document.querySelectorAll('.add-block');
+    var target = document.querySelector('.add-block.bp-target') || addBlocks[0];
+
+    // Clear previous target marker
+    addBlocks.forEach(function(b) { b.classList.remove('bp-target'); });
+
+    // Remove any existing empty section
+    if (activeEmptySection) { activeEmptySection.remove(); activeEmptySection = null; }
+
+    // Build empty section
+    var uid = 'empty-' + Date.now();
+    var sec = document.createElement('div');
+    sec.className = 'ps-empty';
+    sec.id = uid;
+    sec.innerHTML =
+      '<div class="ps-empty-label">Empty section</div>' +
+      '<div class="ps-empty-blocks" id="' + uid + '-blocks"></div>' +
+      '<button class="ps-empty-add-btn picker-closed" onclick="reopenBlockPicker()">' +
+        '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+        'Add blocks' +
+      '</button>';
+
+    // Insert before the target add-block
+    target.parentNode.insertBefore(sec, target);
+    activeEmptySection = sec;
+
+    // Position and show block picker overlaid near the section
+    positionBlockPicker(sec);
+
+    // Hide hover button (picker is open)
+    var addBtn = sec.querySelector('.ps-empty-add-btn');
+    if (addBtn) addBtn.classList.remove('picker-closed');
+    // Reset minimize state
+    bpMinimized = false;
+    document.getElementById('bpBody').classList.remove('minimized');
+    document.getElementById('blockPicker').classList.add('open');
+  }
+
+  function positionBlockPicker(sec) {
+    var picker = document.getElementById('blockPicker');
+    var secRect = sec.getBoundingClientRect();
+    picker.style.position = 'fixed';
+    picker.style.left = (56 + 8) + 'px';  // just right of the left nav strip
+    picker.style.top = secRect.top + 'px'; // aligned with the top of the new section
+    picker.style.bottom = 'auto';
+  }
+
+  function addBlock(name) {
+    if (!activeEmptySection) return;
+    var blocksEl = activeEmptySection.querySelector('.ps-empty-blocks');
+
+    // Update empty hint
+    activeEmptySection.querySelector('.ps-empty-hint') && (activeEmptySection.querySelector('.ps-empty-hint').style.display = 'none');
+
+    var chip = document.createElement('div');
+    chip.className = 'ps-empty-block-chip';
+    chip.innerHTML =
+      '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="1" width="8" height="8" rx="1.5" stroke="#888780" stroke-width="1.2"/></svg>' +
+      name;
+    blocksEl.appendChild(chip);
+    showToast(name + ' block added');
+  }
+
+  function closeBlockPicker() {
+    document.getElementById('blockPicker').classList.remove('open');
+    // Show the hover button on the empty section
+    if (activeEmptySection) {
+      var btn = activeEmptySection.querySelector('.ps-empty-add-btn');
+      if (btn) btn.classList.add('picker-closed');
+    }
+  }
+
+  function reopenBlockPicker() {
+    if (!activeEmptySection) return;
+    // Hide the hover button
+    var btn = activeEmptySection.querySelector('.ps-empty-add-btn');
+    if (btn) btn.classList.remove('picker-closed');
+    positionBlockPicker(activeEmptySection);
+    bpMinimized = false;
+    document.getElementById('bpBody').classList.remove('minimized');
+    document.getElementById('bpMinimize').innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+    document.getElementById('blockPicker').classList.add('open');
+  }
+
+  function toggleBlockPickerMinimize() {
+    bpMinimized = !bpMinimized;
+    document.getElementById('bpBody').classList.toggle('minimized', bpMinimized);
+    var btn = document.getElementById('bpMinimize');
+    btn.title = bpMinimized ? 'Expand' : 'Minimize';
+    btn.innerHTML = bpMinimized
+      ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 7l3-3 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
   }
 
   function startWithCode() {
@@ -3421,6 +3661,51 @@
     <div class="lib-footer">
       <button class="lib-cancel" onclick="closeLibrary()">Cancel</button>
       <button class="lib-apply" id="libApply" disabled onclick="applyLibraryTemplate()">Add element</button>
+    </div>
+  </div>
+</div>
+
+<!-- Block picker panel -->
+<div class="block-picker" id="blockPicker">
+  <div class="block-picker-header">
+    <div class="block-picker-title">Add blocks</div>
+    <div class="block-picker-actions">
+      <button class="block-picker-btn" id="bpMinimize" onclick="toggleBlockPickerMinimize()" title="Minimize">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+      <button class="block-picker-btn" onclick="closeBlockPicker()" title="Close">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2L2 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="block-picker-body" id="bpBody">
+    <div class="block-item" onclick="addBlock('Text')">
+      <div class="block-item-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h8M2 12h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      <div class="block-item-label">Text</div>
+    </div>
+    <div class="block-item" onclick="addBlock('Button')">
+      <div class="block-item-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="6" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 8h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      <div class="block-item-label">Button</div>
+    </div>
+    <div class="block-item" onclick="addBlock('Divider')">
+      <div class="block-item-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 2"/></svg></div>
+      <div class="block-item-label">Divider</div>
+    </div>
+    <div class="block-item" onclick="addBlock('Image')">
+      <div class="block-item-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M2 10l3-3 3 3 2-2 4 3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="6" cy="6" r="1" fill="currentColor"/></svg></div>
+      <div class="block-item-label">Image</div>
+    </div>
+    <div class="block-item" onclick="addBlock('Video')">
+      <div class="block-item-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M12 6l2-1.5v7L12 10" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+      <div class="block-item-label">Video</div>
+    </div>
+    <div class="block-item" onclick="addBlock('Icon')">
+      <div class="block-item-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3l2 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      <div class="block-item-label">Icon</div>
+    </div>
+    <div class="block-item" onclick="addBlock('Logo')">
+      <div class="block-item-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 8h2M9 7.5l2 1-2 1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="block-item-label">Logo</div>
     </div>
   </div>
 </div>
