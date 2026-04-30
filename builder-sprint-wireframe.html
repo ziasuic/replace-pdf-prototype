@@ -351,7 +351,10 @@
     padding: 12px 20px;
     border-bottom: none;
     flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  .lib-filters::-webkit-scrollbar { display: none; }
   .lib-search-wrap {
     display: flex;
     align-items: center;
@@ -2935,12 +2938,15 @@
   var libSelected = null;
 
   var libTemplates = [
-    { name: 'Loyalty Classic',  tag: 'Loyalty',   thumb: 'A' },
-    { name: 'Hero Full Width',  tag: 'Featured',  thumb: 'B' },
-    { name: 'Promo Minimal',    tag: 'Promo',     thumb: 'C' },
-    { name: 'Product Showcase', tag: 'Featured',  thumb: 'D' },
-    { name: 'Editorial Long',   tag: 'Content',   thumb: 'E' },
-    { name: 'Compact Deals',    tag: 'Promo',     thumb: 'F' },
+    { name: 'Loyalty Classic',    tag: 'Loyalty',       thumb: 'A' },
+    { name: 'Loyalty Rewards',    tag: 'Loyalty',       thumb: 'B' },
+    { name: 'Weekly Flyer',       tag: 'Flyer',         thumb: 'C' },
+    { name: 'Seasonal Flyer',     tag: 'Flyer',         thumb: 'D' },
+    { name: 'Promo Email',        tag: 'Email',         thumb: 'E' },
+    { name: 'Newsletter',         tag: 'Email',         thumb: 'F' },
+    { name: 'Product Detail',     tag: 'Product page',  thumb: 'A' },
+    { name: 'Recipe Feature',     tag: 'Recipe',        thumb: 'B' },
+    { name: 'Savings Hub',        tag: 'Savings',       thumb: 'C' },
   ];
 
   var thumbSvgs = {
@@ -3126,9 +3132,11 @@
     <div class="lib-filters">
       <button class="lib-filter on" onclick="libFilter(this,'All')">All</button>
       <button class="lib-filter" onclick="libFilter(this,'Loyalty')">Loyalty</button>
-      <button class="lib-filter" onclick="libFilter(this,'Featured')">Featured</button>
-      <button class="lib-filter" onclick="libFilter(this,'Promo')">Promo</button>
-      <button class="lib-filter" onclick="libFilter(this,'Content')">Content</button>
+      <button class="lib-filter" onclick="libFilter(this,'Flyer')">Flyer</button>
+      <button class="lib-filter" onclick="libFilter(this,'Email')">Email</button>
+      <button class="lib-filter" onclick="libFilter(this,'Product page')">Product page</button>
+      <button class="lib-filter" onclick="libFilter(this,'Recipe')">Recipe</button>
+      <button class="lib-filter" onclick="libFilter(this,'Savings')">Savings</button>
     </div>
     <div class="lib-search-wrap">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M10 10l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
