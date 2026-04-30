@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Builder — Collapsible Interaction Prototype</title>
+<style>
+  /* ─── Reset & Base ─────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    background: #F5F4F0;
+    color: #1a1a1a;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── Page header ──────────────────────────────────────────── */
+  .page-header {
+    width: 100%;
+    max-width: 960px;
+    margin-bottom: 24px;
+  }
+  .page-header h1 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: #888780;
+    line-height: 1.5;
+  }
+  .concept-badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 99px;
+    background: #E1F5EE;
+    color: #0F6E56;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  /* ─── State indicator ──────────────────────────────────────── */
+  .state-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    width: 100%;
+    max-width: 960px;
+  }
+  .s-chip {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 99px;
+    border: 1px solid #D3D1C7;
+    color: #888780;
+    background: #fff;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .s-chip.active {
+    background: #185FA5;
+    color: #fff;
+    border-color: #185FA5;
+    font-weight: 500;
+  }
+  .s-arr { font-size: 13px; color: #B4B2A9; }
+
+  /* ─── Hint bar ─────────────────────────────────────────────── */
+  .hint-bar {
+    width: 100%;
+    max-width: 960px;
+    font-size: 12px;
+    color: #5F5E5A;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+    transition: color 0.2s;
+  }
+  .hint-bar b { color: #1a1a1a; font-weight: 500; }
+
+  /* ─── Builder shell ────────────────────────────────────────── */
+  .builder {
+    width: 100%;
+    max-width: none;
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* ─── Top bar ──────────────────────────────────────────────── */
+  .topbar {
+    background: #F5F4F0;
+    border-bottom: 1px solid #D3D1C7;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+  .topbar-close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #D3D1C7;
+    background: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    color: #5F5E5A;
+  }
+  .topbar-close:hover { background: #EEECEA; color: #1a1a1a; }
+  .bc {
+    font-size: 12px;
+    color: #888780;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .bc b { color: #1a1a1a; font-weight: 500; }
+  .bc .sep { color: #B4B2A9; }
+  .spacer { flex: 1; }
+  .dmt {
+    display: flex;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .dmt-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+    color: #888780;
+    background: #F5F4F0;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .dmt-btn.on { background: #fff; color: #1a1a1a; }
+  .dmt-btn svg { opacity: 0.5; }
+  .dmt-btn.on svg { opacity: 1; }
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #5F5E5A;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 20px;
+    padding: 4px 10px 4px 8px;
+    font-family: inherit;
+    cursor: default;
+    flex-shrink: 0;
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #F5A623;
+    flex-shrink: 0;
+  }
+  .btn-preview {
+    font-size: 12px;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    padding: 5px 12px;
+    color: #5F5E5A;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .btn-preview:hover { border-color: #888780; }
+  .btn-publish {
+    font-size: 12px;
+    background: #185FA5;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 14px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .btn-publish:hover { background: #0C447C; }
+
+  /* ─── Template button in top bar ──────────────────────────── */
+  .tpl-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-family: inherit;
+    color: #5F5E5A;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .tpl-btn:hover { border-color: #888780; background: #FAFAF8; }
+  .tpl-btn svg { opacity: 0.5; }
+  .tpl-btn span { font-weight: 500; color: #1a1a1a; }
+
+  /* ─── Template dropdown ────────────────────────────────────── */
+  .tpl-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    width: 280px;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    z-index: 200;
+    overflow: hidden;
+    display: none;
+  }
+  .tpl-dropdown.open { display: block; }
+  .tpl-dd-head {
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid #EEECEA;
+  }
+  .tpl-dd-title { font-size: 12px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+  .tpl-dd-sub { font-size: 11px; color: #888780; }
+  .tpl-dd-list { padding: 6px 0; }
+  .tpl-dd-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .tpl-dd-item:hover { background: #F5F4F0; }
+  .tpl-dd-item.active { background: #E6F1FB; }
+  .tpl-dd-thumb {
+    width: 36px;
+    height: 28px;
+    background: #EEECEA;
+    border: 1px solid #D3D1C7;
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tpl-dd-item.active .tpl-dd-thumb { background: #D4E8F8; border-color: #9DC8EE; }
+  .tpl-dd-info { flex: 1; min-width: 0; }
+  .tpl-dd-name { font-size: 12px; font-weight: 500; color: #1a1a1a; }
+  .tpl-dd-meta { font-size: 11px; color: #888780; margin-top: 1px; }
+  .tpl-dd-check { color: #185FA5; flex-shrink: 0; }
+  .tpl-dd-footer {
+    border-top: 1px solid #EEECEA;
+    padding: 8px 14px;
+  }
+  .tpl-save-btn {
+    width: 100%;
+    font-size: 12px;
+    font-family: inherit;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    padding: 7px 10px;
+    color: #1a1a1a;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .tpl-save-btn:hover { background: #F5F4F0; border-color: #888780; }
+  .tpl-save-btn svg { color: #888780; flex-shrink: 0; }
+
+  /* ─── Save section button in right panel ───────────────────── */
+  .btn-save-section {
+    width: 100%;
+    font-size: 12px;
+    font-family: inherit;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    padding: 7px 10px;
+    color: #5F5E5A;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 10px;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .btn-save-section:hover { background: #F5F4F0; border-color: #888780; color: #1a1a1a; }
+  .btn-save-section svg { flex-shrink: 0; opacity: 0.6; }
+
+  /* ─── Saved section in Custom tab ──────────────────────────── */
+  .saved-badge {
+    font-size: 10px;
+    background: #E6F1FB;
+    color: #185FA5;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-weight: 500;
+    margin-left: 4px;
+  }
+  .tpl-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .tpl-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ─── Main layout ──────────────────────────────────────────── */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ─── Left nav strip ──────────────────────────────────────── */
+  .lnav {
+    width: 56px;
+    flex-shrink: 0;
+    background: #F5F4F0;
+    border-right: 1px solid #D3D1C7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+    gap: 2px;
+  }
+  .lnav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 44px;
+    height: 56px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    color: #888780;
+    user-select: none;
+  }
+  .lnav-item:hover { background: #EEECEA; color: #5F5E5A; }
+  .lnav-item.active { background: #E6F1FB; color: #185FA5; }
+  .lnav-item svg { flex-shrink: 0; }
+  .lnav-label { font-size: 10px; letter-spacing: 0.01em; text-align: center; line-height: 1.2; }
+
+  /* ─── Left block panel ─────────────────────────────────────── */
+  .lpanel {
+    width: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 0px solid #D3D1C7;
+    transition: width 0.24s cubic-bezier(0.4,0,0.2,1), border-right-width 0.24s;
+  }
+  .lpanel.open { width: 260px; border-right-width: 1px; }
+  .lpanel-inner { width: 260px; display: flex; flex-direction: column; height: 100%; }
+
+  /* Title bar */
+  .lp-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 14px 0;
+    flex-shrink: 0;
+  }
+  .lp-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+
+  /* Tabs */
+  .lp-tabs {
+    display: flex;
+    gap: 0;
+    padding: 10px 14px 0;
+    flex-shrink: 0;
+    border-bottom: 1px solid #E8E6E0;
+    margin: 0 0 0;
+  }
+  .lp-tab {
+    font-size: 13px;
+    padding: 6px 12px 8px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    color: #888780;
+    background: none;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    font-weight: 400;
+  }
+  .lp-tab:hover { color: #1a1a1a; }
+  .lp-tab.on { color: #1a1a1a; border-bottom-color: #1a1a1a; font-weight: 500; }
+  .lp-tab-check { font-size: 10px; }
+
+  /* Search */
+  .lp-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 10px 14px 0;
+    background: #F5F4F0;
+    border: 1px solid #E8E6E0;
+    border-radius: 8px;
+    padding: 0 10px;
+    flex-shrink: 0;
+  }
+  .lp-search-wrap svg { flex-shrink: 0; color: #B4B2A9; }
+  .lp-search {
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 12px;
+    color: #1a1a1a;
+    width: 100%;
+    height: 30px;
+    padding: 0;
+  }
+  .lp-search::placeholder { color: #B4B2A9; }
+
+  /* Section list */
+  .lp-content { flex: 1; overflow-y: auto; padding: 10px 0 16px; }
+  .lp-group { margin-bottom: 4px; }
+  .lp-group-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888780;
+    padding: 10px 14px 6px;
+    letter-spacing: 0.01em;
+  }
+  .lp-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    margin: 0 10px 4px;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.12s;
+    user-select: none;
+  }
+  .lp-item:hover { background: #F5F4F0; border-color: #B4B2A9; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .lp-item-thumb {
+    width: 36px;
+    height: 24px;
+    background: #EEECEA;
+    border: 1px solid #D3D1C7;
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .lp-item-name { font-size: 12px; color: #1a1a1a; flex: 1; }
+
+  /* Hover preview tooltip */
+  .lp-preview {
+    display: none;
+    position: fixed;
+    left: 320px;
+    top: 120px;
+    width: 180px;
+    background: #fff;
+    border: 1px solid #C4C2BA;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    overflow: hidden;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .lp-preview.show { display: block; }
+  .lp-preview-content { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .lp-preview-img { background: #F0EFEB; border-radius: 5px; height: 44px; display: flex; align-items: center; justify-content: center; }
+  .lp-preview-line { height: 6px; background: #E8E6E0; border-radius: 3px; }
+  .lp-preview-btn { height: 18px; width: 60px; background: #185FA5; border-radius: 4px; }
+
+  /* ─── Add entry point ───────────────────────────────── */
+  .add-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 36px;
+    border: 1.5px dashed #C4C2BA;
+    border-radius: 8px;
+    color: #B4B2A9;
+    font-size: 12px;
+    cursor: pointer;
+    background: transparent;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .add-block:hover {
+    border-color: #378ADD;
+    color: #185FA5;
+    background: rgba(55,138,221,0.04);
+  }
+  .add-block svg { flex-shrink: 0; transition: color 0.15s; }
+
+  /* Drop indicator state — transforms add-block into a blue line */
+  .add-block.drop-active {
+    height: 4px !important;
+    border: none !important;
+    background: #378ADD !important;
+    border-radius: 2px;
+    color: transparent !important;
+    overflow: visible;
+    position: relative;
+  }
+  .add-block.drop-active svg { display: none; }
+  .add-block.drop-active::after {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background: #185FA5;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+    pointer-events: none;
+    box-shadow: 0 2px 6px rgba(24,95,165,0.3);
+  }
+
+  /* Drag cursor on Add panel items */
+  .lp-item[draggable="true"] { cursor: grab; }
+  .lp-item[draggable="true"]:active { cursor: grabbing; }
+  .lp-item[draggable="true"]:hover { background: #F5F4F0; border-color: #B4B2A9; }
+  /* Cancel hover state while dragging */
+  .lp-item.is-dragging { opacity: 0.35 !important; background: #fff !important; border-color: #D3D1C7 !important; box-shadow: none !important; cursor: grabbing; }
+
+  /* ─── Canvas ───────────────────────────────────────────────── */
+  .canvas {
+    flex: 1;
+    background: #DDDBD7;
+    overflow-y: auto;
+    padding: 28px 0 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-width: 0;
+    cursor: default;
+  }
+
+  /* ─── Device / browser frame ───────────────────────────────── */
+  .page-frame {
+    width: 100%;
+    max-width: 640px;
+    background: #fff;
+    border: 1px solid #B4B2A9;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+  }
+  .browser-chrome {
+    background: #F0EFEB;
+    border-bottom: 1px solid #D3D1C7;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+  .browser-dots { display: flex; gap: 5px; flex-shrink: 0; }
+  .browser-dot  { width: 10px; height: 10px; border-radius: 50%; background: #D3D1C7; }
+  .browser-dot:nth-child(1) { background: #F09595; }
+  .browser-dot:nth-child(2) { background: #FAC775; }
+  .browser-dot:nth-child(3) { background: #97C459; }
+  .browser-url-bar {
+    flex: 1;
+    height: 22px;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 5px;
+  }
+  .browser-url-icon { color: #B4B2A9; font-size: 10px; }
+  .browser-url-text { font-size: 11px; color: #B4B2A9; letter-spacing: 0.01em; }
+  .page-content {
+    background: #F5F4F0;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* ─── Page sections ────────────────────────────────────────── */
+  .ps {
+    background: #fff;
+    border: 1.5px solid transparent;
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+  .ps:hover { border-color: #378ADD; box-shadow: 0 0 0 3px rgba(55,138,221,0.08); }
+  .ps.sel  { border-color: #378ADD; box-shadow: 0 0 0 3px rgba(55,138,221,0.12); overflow: visible; z-index: 5; }
+
+  /* Section action toolbar — shown below section when selected */
+  .ps-actions {
+    display: none;
+    position: absolute;
+    bottom: -42px;
+    right: 0;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+    padding: 4px 6px;
+    align-items: center;
+    gap: 2px;
+    z-index: 20;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  }
+  .ps.sel .ps-actions { display: flex; }
+  .ps-act {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #5F5E5A;
+    transition: background 0.12s, color 0.12s;
+    flex-shrink: 0;
+  }
+  .ps-act:hover { background: #F5F4F0; color: #1a1a1a; }
+  .ps-act.danger { color: #D94F4F; }
+  .ps-act.danger:hover { background: #FCEBEB; color: #C03030; }
+  .ps-act-sep { width: 1px; height: 16px; background: #E8E6E0; flex-shrink: 0; margin: 0 2px; }
+
+  /* Edit button — top right, shown on hover only */
+  .ps-edit-btn {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1a1a1a;
+    background: #fff;
+    border: 1px solid #C4C2BA;
+    border-radius: 6px;
+    padding: 4px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    z-index: 4;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    pointer-events: all;
+  }
+  .ps:hover:not(.sel) .ps-edit-btn { display: block; }
+  .ps-edit-btn:hover { border-color: #888780; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+  /* Section label chip above selected */
+  .ps-label {
+    display: none;
+    position: absolute;
+    top: -24px;
+    left: -1px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #185FA5;
+    background: #E6F1FB;
+    border: 1px solid #B5D4F4;
+    border-bottom: none;
+    padding: 3px 10px;
+    border-radius: 6px 6px 0 0;
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 0.02em;
+  }
+  .ps.sel .ps-label { display: block; }
+
+  /* Hover hint — hidden, replaced by Edit button */
+  .ps-hover-hint { display: none !important; }
+
+  /* ─── Section content ──────────────────────────────────────── */
+  .img-ph {
+    background: #F5F4F0;
+    border: 1px dashed #D3D1C7;
+    border-radius: 8px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #B4B2A9;
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+  .ph {
+    height: 8px;
+    background: #E8E6E0;
+    border-radius: 4px;
+    margin-bottom: 6px;
+  }
+  .hero-heading {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: #185FA5;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+    margin-top: 4px;
+    pointer-events: none;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .product-card {
+    background: #F5F4F0;
+    border: 1px solid #E8E6E0;
+    border-radius: 8px;
+    height: 68px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .product-thumb { width: 28px; height: 28px; background: #D3D1C7; border-radius: 4px; }
+  .product-name { width: 48px; height: 6px; background: #D3D1C7; border-radius: 3px; }
+
+  .promo-strip {
+    background: linear-gradient(90deg, #E6F1FB 0%, #EEF6FE 100%);
+    border: 1px solid #B5D4F4;
+    border-radius: 8px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .promo-dot { width: 10px; height: 10px; border-radius: 50%; background: #378ADD; flex-shrink: 0; }
+
+  /* ─── Editable text ────────────────────────────────────────── */
+  .etxt {
+    cursor: text;
+    border-radius: 4px;
+    display: inline;
+    padding: 1px 3px;
+    margin: -1px -3px;
+    transition: background 0.12s, outline 0.12s;
+    position: relative;
+  }
+  .etxt::after {
+    content: ' ✎';
+    font-size: 10px;
+    color: #B5D4F4;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .ps:hover .etxt::after { opacity: 0; }
+  .etxt:hover { background: rgba(55,138,221,0.08); }
+  .etxt.editing {
+    background: rgba(55,138,221,0.1);
+    outline: 2px solid #378ADD;
+    outline-offset: 2px;
+  }
+  .etxt.editing::after { opacity: 0; }
+
+  /* ─── Floating inline text toolbar ────────────────────────── */
+  .itbar {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #C4C2BA;
+    border-radius: 8px;
+    padding: 5px 10px;
+    align-items: center;
+    gap: 5px;
+    z-index: 30;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    pointer-events: all;
+  }
+  .itbar.show { display: flex; }
+  .tbb {
+    font-size: 12px;
+    color: #5F5E5A;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: background 0.12s, color 0.12s;
+    user-select: none;
+  }
+  .tbb:hover { background: #F5F4F0; color: #1a1a1a; }
+  .tbb.on { background: #F5F4F0; color: #1a1a1a; font-weight: 600; }
+  .tsep { width: 1px; height: 14px; background: #E8E6E0; flex-shrink: 0; }
+  .csw {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: transform 0.12s, border-color 0.12s;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .csw:hover { transform: scale(1.2); border-color: rgba(0,0,0,0.2); }
+  .done-btn {
+    font-size: 11px;
+    font-weight: 500;
+    color: #185FA5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #E6F1FB;
+    border: 1px solid #B5D4F4;
+    transition: background 0.12s;
+    user-select: none;
+  }
+  .done-btn:hover { background: #cce3f5; }
+
+  /* ─── FAB button ───────────────────────────────────────────── */
+  .fab-wrap {
+    position: absolute;
+    bottom: 18px;
+    left: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+  }
+  .fab {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #185FA5;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, transform 0.15s;
+    border: none;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(24,95,165,0.3);
+  }
+  .fab:hover { background: #0C447C; transform: scale(1.06); }
+  .fab.active { background: #0C447C; }
+  .fab.active .fab-icon-add { display: none; }
+  .fab.active .fab-icon-close { display: flex; }
+  .fab-icon-add { display: flex; }
+  .fab-icon-close { display: none; align-items: center; justify-content: center; }
+  .fab-tooltip {
+    font-size: 11px;
+    font-weight: 500;
+    color: #5F5E5A;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    pointer-events: none;
+  }
+
+  /* ─── Setup panel ─────────────────────────────────────────── */
+  .spanel {
+    width: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 0px solid #D3D1C7;
+    transition: width 0.24s cubic-bezier(0.4,0,0.2,1), border-right-width 0.24s;
+  }
+  .spanel.open { width: 260px; border-right-width: 1px; }
+  .spanel-inner { width: 260px; padding: 0; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
+  .sp-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 14px 12px;
+    border-bottom: 1px solid #D3D1C7;
+    flex-shrink: 0;
+  }
+  .sp-titlebar-label { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .sp-content { padding: 20px 16px 16px; }
+
+  .sp-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .sp-ring {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .sp-ring svg { transform: rotate(-90deg); }
+  .sp-ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .sp-progress-text { flex: 1; }
+  .sp-progress-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 3px; }
+  .sp-progress-sub { font-size: 11px; color: #888780; line-height: 1.4; }
+
+  .sp-list { display: flex; flex-direction: column; gap: 2px; }
+  .sp-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .sp-item:hover { background: #F5F4F0; }
+  .sp-item.done { opacity: 0.7; }
+  .sp-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #D3D1C7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #fff;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .sp-item.done .sp-check {
+    background: #0F6E56;
+    border-color: #0F6E56;
+  }
+  .sp-item-label {
+    flex: 1;
+    font-size: 13px;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+  .sp-item.done .sp-item-label { color: #888780; text-decoration: line-through; }
+  .sp-chevron { color: #B4B2A9; font-size: 12px; }
+  .sp-item.done .sp-chevron { display: none; }
+
+  .sp-divider { height: 1px; background: #E8E6E0; margin: 12px 0; }
+
+  /* ─── Structure panel ─────────────────────────────────────── */
+  .strpanel {
+    width: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-right: 0px solid #D3D1C7;
+    transition: width 0.24s cubic-bezier(0.4,0,0.2,1), border-right-width 0.24s;
+  }
+  .strpanel.open { width: 260px; border-right-width: 1px; }
+  .no-transition { transition: none !important; }
+  .strpanel-inner { width: 260px; padding: 0; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
+
+  .str-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 14px 12px;
+    border-bottom: 1px solid #D3D1C7;
+    flex-shrink: 0;
+  }
+  .str-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .str-close {
+    width: 22px; height: 22px;
+    background: #E8E6E0; border: none; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #888780; font-size: 12px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .str-close:hover { background: #D3D1C7; color: #1a1a1a; }
+
+  .str-zone { padding: 0 0 6px; }
+  .str-zone-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #B4B2A9;
+    padding: 12px 14px 6px;
+    text-transform: uppercase;
+  }
+  .str-list { display: flex; flex-direction: column; }
+
+  .str-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    cursor: grab;
+    border-radius: 0;
+    transition: background 0.12s;
+    user-select: none;
+    position: relative;
+  }
+  .str-item:hover { background: #EEECEA; }
+  .str-item.drag-over { background: #E6F1FB; }
+  .str-item.drag-over::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: #378ADD;
+    border-radius: 1px;
+  }
+  .str-item.dragging { opacity: 0.4; }
+
+  .str-drag {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+    color: #C4C2BA;
+    cursor: grab;
+    padding: 1px 2px;
+  }
+  .str-drag-row { display: flex; gap: 2px; }
+  .str-dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+
+  .str-item-icon {
+    width: 22px; height: 22px;
+    background: #E8E6E0;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .str-item-icon svg { opacity: 0.55; }
+  .str-item-name { flex: 1; font-size: 12px; color: #1a1a1a; }
+
+  .str-item.locked { cursor: default; }
+  .str-item.locked .str-drag { opacity: 0.3; cursor: default; }
+
+  .str-add {
+    font-size: 12px;
+    color: #888780;
+    padding: 6px 14px 6px 44px;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .str-add:hover { color: #185FA5; }
+
+  .str-zone-divider { height: 1px; background: #D3D1C7; margin: 2px 0; }
+
+  /* ─── Right section panel ──────────────────────────────────── */
+  .rpanel {
+    width: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #F5F4F0;
+    border-left: 0px solid #D3D1C7;
+    transition: width 0.24s cubic-bezier(0.4,0,0.2,1), border-left-width 0.24s;
+  }
+  .rpanel.open { width: 220px; border-left-width: 1px; }
+  .rpanel-inner { width: 220px; padding: 14px; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+
+  .rp-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .rp-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .rp-close {
+    width: 22px;
+    height: 22px;
+    background: #E8E6E0;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #888780;
+    font-size: 12px;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .rp-close:hover { background: #D3D1C7; color: #1a1a1a; }
+
+  .rp-sec-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #B4B2A9;
+    margin-bottom: 8px;
+    margin-top: 14px;
+  }
+  .rp-sec-label:first-of-type { margin-top: 0; }
+
+  .lo-opts { display: flex; gap: 6px; margin-bottom: 2px; }
+  .lo {
+    background: #fff;
+    border: 1.5px solid #D3D1C7;
+    border-radius: 6px;
+    padding: 6px 5px;
+    cursor: pointer;
+    flex: 1;
+    transition: border-color 0.15s;
+  }
+  .lo:hover { border-color: #378ADD; }
+  .lo.on { border-color: #185FA5; background: #E6F1FB; }
+  .lo-mini { display: flex; gap: 2px; }
+  .lo-col { background: #D3D1C7; border-radius: 2px; height: 14px; flex: 1; }
+  .lo.on .lo-col { background: #B5D4F4; }
+
+  .fi { margin-bottom: 10px; }
+  .fi-label { font-size: 11px; color: #5F5E5A; margin-bottom: 4px; }
+  .fi-input {
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    height: 28px;
+    width: 100%;
+    display: block;
+    padding: 0 8px;
+    font-size: 12px;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .fi-input:focus { border-color: #378ADD; }
+
+  .swatch-row { display: flex; gap: 5px; }
+  .swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.12s, border-color 0.12s;
+  }
+  .swatch:hover { transform: scale(1.1); }
+  .swatch.on { border-color: #185FA5; }
+
+  .toggle-row { display: flex; align-items: center; gap: 8px; }
+  .toggle {
+    width: 32px;
+    height: 18px;
+    background: #185FA5;
+    border-radius: 9px;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .toggle-knob {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    transition: right 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .toggle.off { background: #D3D1C7; }
+  .toggle.off .toggle-knob { right: auto; left: 2px; }
+  .toggle-label { font-size: 12px; color: #5F5E5A; }
+
+  .adv-link {
+    font-size: 12px;
+    color: #185FA5;
+    cursor: pointer;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+  }
+  .adv-link:hover { color: #0C447C; }
+
+  .rp-actions { display: flex; gap: 6px; margin-top: auto; padding-top: 14px; border-top: 1px solid #D3D1C7; }
+  .btn-dup {
+    flex: 1;
+    font-size: 12px;
+    background: #fff;
+    border: 1px solid #D3D1C7;
+    border-radius: 6px;
+    padding: 6px;
+    color: #5F5E5A;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s;
+  }
+  .btn-dup:hover { border-color: #888780; }
+  .btn-del {
+    flex: 1;
+    font-size: 12px;
+    background: #fff;
+    border: 1px solid #F09595;
+    border-radius: 6px;
+    padding: 6px;
+    color: #E24B4A;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .btn-del:hover { background: #FCEBEB; }
+
+  /* ─── Annotation bar ───────────────────────────────────────── */
+  .anno {
+    width: 100%;
+    max-width: 960px;
+    font-size: 12px;
+    color: #5F5E5A;
+    background: #fff;
+    border-left: 3px solid #378ADD;
+    border-radius: 0 8px 8px 0;
+    padding: 8px 14px;
+    margin-top: 12px;
+    line-height: 1.6;
+    transition: all 0.2s;
+  }
+  .anno b { color: #1a1a1a; font-weight: 500; }
+
+  /* ─── Footer ───────────────────────────────────────────────── */
+  .proto-footer {
+    width: 100%;
+    max-width: 960px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #D3D1C7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .proto-footer p { font-size: 11px; color: #B4B2A9; }
+  .flow-steps {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    font-size: 11px;
+    color: #888780;
+    background: #F5F4F0;
+    border: 1px solid #E8E6E0;
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+  .flow-step b { color: #5F5E5A; font-weight: 500; }
+  .flow-arr { font-size: 11px; color: #D3D1C7; }
+</style>
+</head>
+<body>
+
+<!-- ── Page header ─────────────────────────────────── -->
+<!-- ── Builder ─────────────────────────────────────── -->
+<div class="builder" id="builder">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-close" title="Close builder">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="bc" id="bc">
+      <span>Page</span>
+    </div>
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      Draft
+    </div>
+    <div class="spacer"></div>
+    <div class="dmt">
+      <button class="dmt-btn on" id="dmDesktop">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M4 10h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M6 8v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Desktop
+      </button>
+      <button class="dmt-btn" id="dmMobile">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="3" y="1" width="6" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="6" cy="9.5" r="0.5" fill="currentColor"/></svg>
+        Mobile
+      </button>
+    </div>
+    <!-- Template button + dropdown -->
+    <div style="position:relative;">
+      <button class="tpl-btn" id="tplBtn" onclick="toggleTplDropdown()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.3"/><path d="M5 5v8" stroke="currentColor" stroke-width="1.3"/></svg>
+        Template: <span id="tplCurrentName">Default</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="tpl-dropdown" id="tplDropdown">
+        <div class="tpl-dd-head">
+          <div class="tpl-dd-title">Page templates</div>
+          <div class="tpl-dd-sub">Switch or save the current layout</div>
+        </div>
+        <div class="tpl-dd-list" id="tplList">
+          <div class="tpl-dd-item active" onclick="switchTemplate('Default',this)">
+            <div class="tpl-dd-thumb">
+              <svg width="20" height="16" viewBox="0 0 20 16" fill="none"><rect x="1" y="1" width="18" height="3" rx="1" fill="#D3D1C7"/><rect x="1" y="6" width="18" height="5" rx="1" fill="#EEECEA"/><rect x="1" y="13" width="18" height="2" rx="1" fill="#D3D1C7"/></svg>
+            </div>
+            <div class="tpl-dd-info">
+              <div class="tpl-dd-name">Default</div>
+              <div class="tpl-dd-meta">Current layout</div>
+            </div>
+            <svg class="tpl-dd-check" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#185FA5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="tpl-dd-footer">
+          <button class="tpl-save-btn" onclick="saveAsTemplate()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M6.5 4v5M4 6.5h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Save current layout as template
+          </button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-preview">Preview</button>
+    <button class="btn-publish">Publish</button>
+  </div>
+  <!-- Toast -->
+  <div class="tpl-toast" id="tplToast"></div>
+
+  <!-- Main area -->
+  <div class="main">
+
+    <!-- Left icon nav strip -->
+    <div class="lnav" id="lnav">
+
+      <!-- Setup -->
+      <div class="lnav-item" id="nav-setup" onclick="switchNav('setup')" title="Setup">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 2C10 2 11.5 4 14 4C14 4 16 5.5 16 8C16 10.5 14 12 14 12L10 18L6 12C6 12 4 10.5 4 8C4 5.5 6 4 6 4C8.5 4 10 2 10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+          <circle cx="10" cy="8" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+        <span class="lnav-label">Setup</span>
+      </div>
+
+      <!-- Sections -->
+      <div class="lnav-item" id="nav-sections" onclick="switchNav('sections')" title="Sections">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="11" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="2" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <rect x="11" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+        <span class="lnav-label">Structure</span>
+      </div>
+
+      <!-- Add (opens block picker) -->
+      <div class="lnav-item" id="nav-add" onclick="switchNav('add')" title="Add">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="lnav-label">Add</span>
+      </div>
+
+      <!-- Styles -->
+      <div class="lnav-item" id="nav-styles" onclick="switchNav('styles')" title="Styles">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M4 14c0-1.1.9-2 2-2h2V6l6 6h-4v2a2 2 0 01-2 2H4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+          <path d="M14 4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="15" cy="15" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M15 13.5v1.5l1 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="lnav-label">Styles</span>
+      </div>
+
+      <!-- AI tools -->
+      <div class="lnav-item" id="nav-ai" onclick="switchNav('ai')" title="AI tools">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 3L11.5 7.5L16 9L11.5 10.5L10 15L8.5 10.5L4 9L8.5 7.5L10 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+          <path d="M16 14L16.75 16L19 16.75L16.75 17.5L16 19L15.25 17.5L13 16.75L15.25 16L16 14Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <span class="lnav-label">AI tools</span>
+      </div>
+
+    </div>
+
+    <!-- Setup panel -->
+    <div class="spanel" id="spanel">
+      <div class="spanel-inner">
+
+        <div class="sp-titlebar">
+          <span class="sp-titlebar-label">Setup</span>
+          <div class="str-close" onclick="switchNav('setup')">✕</div>
+        </div>
+
+        <div class="sp-content">
+
+        <!-- Progress ring + title -->
+        <div class="sp-progress-row">
+          <div class="sp-ring">
+            <svg width="52" height="52" viewBox="0 0 52 52">
+              <circle cx="26" cy="26" r="22" fill="none" stroke="#E8E6E0" stroke-width="4"/>
+              <!-- 5 of 7 done: circumference = 2π×22 ≈ 138.2; 5/7 × 138.2 ≈ 98.7 -->
+              <circle id="sp-ring-arc" cx="26" cy="26" r="22" fill="none" stroke="#0F6E56" stroke-width="4"
+                stroke-dasharray="98.7 138.2" stroke-linecap="round"/>
+            </svg>
+            <div class="sp-ring-label" id="sp-ring-label">5/7</div>
+          </div>
+          <div class="sp-progress-text">
+            <div class="sp-progress-title">Loyalty page setup</div>
+            <div class="sp-progress-sub">5 of 7 steps complete</div>
+          </div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="sp-list" id="sp-list">
+
+          <div class="sp-item done" onclick="toggleStep(this)">
+            <div class="sp-check">
+              <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="sp-item-label">Set up your loyalty page</div>
+            <span class="sp-chevron">›</span>
+          </div>
+
+          <div class="sp-item done" onclick="toggleStep(this)">
+            <div class="sp-check">
+              <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="sp-item-label">Add your loyalty program details</div>
+            <span class="sp-chevron">›</span>
+          </div>
+
+          <div class="sp-item done" onclick="toggleStep(this)">
+            <div class="sp-check">
+              <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="sp-item-label">Edit heading text</div>
+            <span class="sp-chevron">›</span>
+          </div>
+
+          <div class="sp-item done" onclick="toggleStep(this)">
+            <div class="sp-check">
+              <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="sp-item-label">Configure rewards &amp; benefits</div>
+            <span class="sp-chevron">›</span>
+          </div>
+
+          <div class="sp-item done" onclick="toggleStep(this)">
+            <div class="sp-check">
+              <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="sp-item-label">Preview on mobile</div>
+            <span class="sp-chevron">›</span>
+          </div>
+
+          <div class="sp-divider"></div>
+
+          <div class="sp-item" onclick="toggleStep(this); selSection(event,'hero','Hero banner');">
+            <div class="sp-check"></div>
+            <div class="sp-item-label">Update images</div>
+            <span class="sp-chevron">›</span>
+          </div>
+
+          <div class="sp-item" onclick="toggleStep(this)">
+            <div class="sp-check"></div>
+            <div class="sp-item-label">Go live!</div>
+            <span class="sp-chevron">›</span>
+          </div>
+
+        </div>
+        </div><!-- /sp-content -->
+      </div>
+    </div>
+
+    <!-- Structure panel -->
+    <div class="strpanel" id="strpanel">
+      <div class="strpanel-inner">
+
+        <div class="str-titlebar">
+          <span class="str-title">Structure</span>
+          <div class="str-close" onclick="closeStrPanel()">✕</div>
+        </div>
+
+        <!-- HEADER zone (locked — items can reorder within, not leave) -->
+        <div class="str-zone" data-zone="header">
+          <div class="str-zone-label">Header</div>
+          <div class="str-list" id="list-header" data-zone="header">
+
+            <div class="str-item locked" draggable="true" data-zone="header">
+              <div class="str-drag"><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div></div>
+              <div class="str-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="2" rx="1" fill="#888"/><rect x="1" y="5.5" width="7" height="2" rx="1" fill="#888"/><rect x="1" y="9" width="5" height="2" rx="1" fill="#888"/></svg></div>
+              <div class="str-item-name">Nav bar</div>
+            </div>
+
+            <div class="str-item locked" draggable="true" data-zone="header">
+              <div class="str-drag"><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div></div>
+              <div class="str-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="6" rx="2" stroke="#888" stroke-width="1.2" fill="none"/><rect x="3" y="5.5" width="6" height="1" rx="0.5" fill="#888"/></svg></div>
+              <div class="str-item-name">Filter bar</div>
+            </div>
+
+          </div>
+          <div class="str-add">+ Add section</div>
+        </div>
+
+        <div class="str-zone-divider"></div>
+
+        <!-- BODY zone (free reorder within body) -->
+        <div class="str-zone" data-zone="body">
+          <div class="str-zone-label">Body</div>
+          <div class="str-list" id="list-body" data-zone="body">
+
+            <div class="str-item" draggable="true" data-zone="body">
+              <div class="str-drag"><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div></div>
+              <div class="str-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="1.5" stroke="#888" stroke-width="1.2" fill="none"/><path d="M1 8l3-3 2.5 2.5L9 5l2 3" stroke="#888" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg></div>
+              <div class="str-item-name">Hero banner</div>
+            </div>
+
+            <div class="str-item" draggable="true" data-zone="body">
+              <div class="str-drag"><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div></div>
+              <div class="str-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="4.5" height="5" rx="1" fill="#888" opacity="0.5"/><rect x="6.5" y="1" width="4.5" height="5" rx="1" fill="#888" opacity="0.5"/><rect x="1" y="7" width="4.5" height="4" rx="1" fill="#888" opacity="0.5"/><rect x="6.5" y="7" width="4.5" height="4" rx="1" fill="#888" opacity="0.5"/></svg></div>
+              <div class="str-item-name">Featured items</div>
+            </div>
+
+            <div class="str-item" draggable="true" data-zone="body">
+              <div class="str-drag"><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div></div>
+              <div class="str-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="8" rx="1.5" stroke="#888" stroke-width="1.2" fill="none"/><rect x="3" y="4.5" width="4" height="1" rx="0.5" fill="#888"/><rect x="3" y="6.5" width="6" height="1" rx="0.5" fill="#888"/></svg></div>
+              <div class="str-item-name">Promotions</div>
+            </div>
+
+          </div>
+          <div class="str-add">+ Add section</div>
+        </div>
+
+        <div class="str-zone-divider"></div>
+
+        <!-- FOOTER zone (locked) -->
+        <div class="str-zone" data-zone="footer">
+          <div class="str-zone-label">Footer</div>
+          <div class="str-list" id="list-footer" data-zone="footer">
+
+            <div class="str-item locked" draggable="true" data-zone="footer">
+              <div class="str-drag"><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div></div>
+              <div class="str-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="8" rx="1.5" stroke="#888" stroke-width="1.2" fill="none"/><rect x="3" y="5" width="6" height="1" rx="0.5" fill="#888"/></svg></div>
+              <div class="str-item-name">Footer links</div>
+            </div>
+
+            <div class="str-item locked" draggable="true" data-zone="footer">
+              <div class="str-drag"><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div><div class="str-drag-row"><div class="str-dot"></div><div class="str-dot"></div></div></div>
+              <div class="str-item-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="6" rx="1" stroke="#888" stroke-width="1.2" fill="none"/><rect x="3" y="5" width="2" height="2" rx="0.5" fill="#888" opacity="0.6"/><rect x="6" y="5" width="4" height="1" rx="0.5" fill="#888"/></svg></div>
+              <div class="str-item-name">Legal footer</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Left block panel (Add) -->
+    <div class="lpanel" id="lpanel">
+      <div class="lpanel-inner">
+
+        <!-- Title + close -->
+        <div class="lp-titlebar">
+          <span class="lp-title">Add</span>
+          <div class="str-close" onclick="switchNav('add')">✕</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="lp-tabs">
+          <div class="lp-tab on" onclick="lpTab(this,'sections')">Sections</div>
+          <div class="lp-tab" onclick="lpTab(this,'blocks')">Blocks</div>
+          <div class="lp-tab" onclick="lpTab(this,'custom')">Custom</div>
+        </div>
+
+        <!-- Search -->
+        <div class="lp-search-wrap">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/><path d="M9 9l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <input class="lp-search" placeholder="Search" type="text" id="lp-search-input" oninput="lpSearch(this.value)">
+        </div>
+
+        <!-- Sections tab content -->
+        <div class="lp-content" id="lp-tab-sections">
+
+          <div class="lp-group" data-group="banner">
+            <div class="lp-group-label">Banner</div>
+            <div class="lp-item" onmouseenter="showPreview(event,'banner')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="1" width="22" height="14" rx="2" fill="#E8E6E0"/><rect x="3" y="3" width="10" height="4" rx="1" fill="#D3D1C7"/><rect x="3" y="9" width="7" height="2" rx="1" fill="#D3D1C7"/><rect x="3" y="12" width="4" height="2" rx="1" fill="#B4B2A9"/></svg></div>
+              <span class="lp-item-name">Regular banner</span>
+            </div>
+            <div class="lp-item" onmouseenter="showPreview(event,'slim')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="4" width="22" height="8" rx="2" fill="#E8E6E0"/><rect x="3" y="6.5" width="8" height="2" rx="1" fill="#D3D1C7"/><rect x="17" y="6.5" width="5" height="2" rx="1" fill="#B4B2A9"/></svg></div>
+              <span class="lp-item-name">Slim banner</span>
+            </div>
+          </div>
+
+          <div class="lp-group" data-group="product-collections">
+            <div class="lp-group-label">Product collections</div>
+            <div class="lp-item" onmouseenter="showPreview(event,'carousel')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="2" width="6" height="12" rx="1.5" fill="#E8E6E0"/><rect x="9" y="2" width="6" height="12" rx="1.5" fill="#E8E6E0"/><rect x="17" y="2" width="6" height="12" rx="1.5" fill="#E8E6E0"/><rect x="2.5" y="3.5" width="3" height="3" rx="0.5" fill="#D3D1C7"/><rect x="10.5" y="3.5" width="3" height="3" rx="0.5" fill="#D3D1C7"/><rect x="18.5" y="3.5" width="3" height="3" rx="0.5" fill="#D3D1C7"/></svg></div>
+              <span class="lp-item-name">Regular carousel</span>
+            </div>
+            <div class="lp-item" onmouseenter="showPreview(event,'featured')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="1" width="13" height="14" rx="1.5" fill="#E8E6E0"/><rect x="15" y="1" width="8" height="6.5" rx="1.5" fill="#E8E6E0"/><rect x="15" y="8.5" width="8" height="6.5" rx="1.5" fill="#E8E6E0"/></svg></div>
+              <span class="lp-item-name">Featured carousel</span>
+            </div>
+            <div class="lp-item" onmouseenter="showPreview(event,'tiles')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="2" width="10" height="12" rx="1.5" fill="#E8E6E0"/><rect x="13" y="2" width="4.5" height="5.5" rx="1" fill="#E8E6E0"/><rect x="13" y="8.5" width="4.5" height="5.5" rx="1" fill="#E8E6E0"/><rect x="18.5" y="2" width="4.5" height="5.5" rx="1" fill="#E8E6E0"/><rect x="18.5" y="8.5" width="4.5" height="5.5" rx="1" fill="#E8E6E0"/></svg></div>
+              <span class="lp-item-name">Image tile carousel</span>
+            </div>
+          </div>
+
+          <div class="lp-group" data-group="links">
+            <div class="lp-group-label">Links</div>
+            <div class="lp-item" onmouseenter="showPreview(event,'links')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="3" width="6" height="10" rx="1.5" fill="#E8E6E0"/><rect x="9" y="3" width="6" height="10" rx="1.5" fill="#E8E6E0"/><rect x="17" y="3" width="6" height="10" rx="1.5" fill="#E8E6E0"/><rect x="2" y="10" width="4" height="1.5" rx="0.5" fill="#D3D1C7"/><rect x="10" y="10" width="4" height="1.5" rx="0.5" fill="#D3D1C7"/><rect x="18" y="10" width="4" height="1.5" rx="0.5" fill="#D3D1C7"/></svg></div>
+              <span class="lp-item-name">Quick links</span>
+            </div>
+            <div class="lp-item" onmouseenter="showPreview(event,'imglinks')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="1" width="10" height="14" rx="1.5" fill="#E8E6E0"/><rect x="13" y="1" width="10" height="6.5" rx="1.5" fill="#E8E6E0"/><rect x="13" y="8.5" width="10" height="6.5" rx="1.5" fill="#E8E6E0"/></svg></div>
+              <span class="lp-item-name">Image tiles links</span>
+            </div>
+          </div>
+
+          <div class="lp-group" data-group="text">
+            <div class="lp-group-label">Text</div>
+            <div class="lp-item" onmouseenter="showPreview(event,'text')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="2" y="3" width="20" height="2" rx="1" fill="#D3D1C7"/><rect x="2" y="7" width="16" height="2" rx="1" fill="#D3D1C7"/><rect x="2" y="11" width="12" height="2" rx="1" fill="#D3D1C7"/></svg></div>
+              <span class="lp-item-name">Text container</span>
+            </div>
+            <div class="lp-item" onmouseenter="showPreview(event,'sectext')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="2" y="2" width="12" height="3" rx="1" fill="#B4B2A9"/><rect x="2" y="7" width="20" height="2" rx="1" fill="#D3D1C7"/><rect x="2" y="11" width="16" height="2" rx="1" fill="#D3D1C7"/></svg></div>
+              <span class="lp-item-name">Section text</span>
+            </div>
+            <div class="lp-item" onmouseenter="showPreview(event,'cards')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="3" width="10" height="10" rx="1.5" fill="#E8E6E0"/><rect x="13" y="3" width="10" height="10" rx="1.5" fill="#E8E6E0"/><rect x="2" y="4.5" width="8" height="4" rx="0.5" fill="#D3D1C7"/><rect x="14" y="4.5" width="8" height="4" rx="0.5" fill="#D3D1C7"/></svg></div>
+              <span class="lp-item-name">Cards section</span>
+            </div>
+          </div>
+
+          <div class="lp-group" data-group="code">
+            <div class="lp-group-label">Code</div>
+            <div class="lp-item" onmouseenter="showPreview(event,'embed')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="2" width="22" height="12" rx="2" fill="#E8E6E0"/><path d="M7 8L4.5 6 7 4" stroke="#B4B2A9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 8l2.5-2L17 4" stroke="#B4B2A9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4l-2 8" stroke="#B4B2A9" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+              <span class="lp-item-name">Embed</span>
+            </div>
+            <div class="lp-item" onmouseenter="showPreview(event,'custom')" onmouseleave="hidePreview()">
+              <div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="2" width="22" height="12" rx="2" stroke="#D3D1C7" stroke-width="1.2" fill="none" stroke-dasharray="2 2"/><path d="M12 6v4M10 8h4" stroke="#C4C2BA" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+              <span class="lp-item-name">Custom section</span>
+            </div>
+          </div>
+
+        </div><!-- /lp-tab-sections -->
+
+        <!-- Blocks tab content (hidden) -->
+        <div class="lp-content" id="lp-tab-blocks" style="display:none">
+          <div class="lp-group">
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="2" y="4" width="20" height="2" rx="1" fill="#D3D1C7"/><rect x="2" y="8" width="14" height="2" rx="1" fill="#D3D1C7"/><rect x="2" y="12" width="10" height="2" rx="1" fill="#D3D1C7"/></svg></div><span class="lp-item-name">Text</span></div>
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="5" y="4" width="14" height="8" rx="2" fill="#E8E6E0"/><rect x="7" y="7" width="10" height="2" rx="1" fill="#B4B2A9"/></svg></div><span class="lp-item-name">Button</span></div>
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><line x1="2" y1="8" x2="22" y2="8" stroke="#D3D1C7" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="lp-item-name">Divider</span></div>
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="1" width="22" height="14" rx="2" fill="#E8E6E0"/><path d="M1 11l5-5 4 4 4-4 9 6" stroke="#D3D1C7" stroke-width="1.3" stroke-linejoin="round"/><circle cx="7" cy="5" r="1.5" fill="#D3D1C7"/></svg></div><span class="lp-item-name">Image</span></div>
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="1" y="2" width="16" height="12" rx="1.5" fill="#E8E6E0"/><path d="M19 6l4 2-4 2V6z" fill="#D3D1C7"/><rect x="3" y="4" width="10" height="6" rx="1" fill="#D3D1C7" opacity="0.5"/></svg></div><span class="lp-item-name">Video</span></div>
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><circle cx="12" cy="8" r="5" stroke="#D3D1C7" stroke-width="1.5" fill="none"/><path d="M12 5v3l2 1.5" stroke="#D3D1C7" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="lp-item-name">Icon</span></div>
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><rect x="4" y="4" width="16" height="8" rx="1.5" fill="#E8E6E0"/><rect x="6" y="6" width="5" height="4" rx="0.5" fill="#D3D1C7"/><rect x="13" y="7" width="5" height="1.5" rx="0.5" fill="#D3D1C7"/></svg></div><span class="lp-item-name">Logo</span></div>
+            <div class="lp-item"><div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none"><circle cx="5" cy="8" r="2.5" fill="#D3D1C7"/><circle cx="12" cy="8" r="2.5" fill="#D3D1C7"/><circle cx="19" cy="8" r="2.5" fill="#D3D1C7"/></svg></div><span class="lp-item-name">Social</span></div>
+          </div>
+        </div>
+
+        <!-- Custom tab content (hidden) -->
+        <div class="lp-content" id="lp-tab-custom" style="display:none">
+          <div id="custom-empty" style="padding:32px 14px;text-align:center;">
+            <div style="font-size:12px;color:#888780;line-height:1.6">No saved sections yet.<br>Select a section and save it to your library.</div>
+          </div>
+          <div class="lp-group" id="custom-saved" style="display:none"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section preview tooltip -->
+    <div class="lp-preview" id="lp-preview">
+      <div class="lp-preview-content">
+        <div class="lp-preview-img">
+          <svg width="28" height="20" viewBox="0 0 28 20" fill="none"><rect x="1" y="1" width="26" height="18" rx="2.5" fill="#E8E6E0"/><path d="M1 14l6-6 5 5 4-4 11 7" stroke="#D3D1C7" stroke-width="1.3" stroke-linejoin="round"/><circle cx="8" cy="6" r="2" fill="#D3D1C7"/></svg>
+        </div>
+        <div class="lp-preview-line" style="width:80%"></div>
+        <div class="lp-preview-line" style="width:55%"></div>
+        <div class="lp-preview-btn"></div>
+      </div>
+    </div>
+
+    <!-- Canvas -->
+    <div class="canvas" id="canvas" onclick="canvasBgClick(event)">
+
+      <!-- Device / browser frame -->
+      <div class="page-frame" id="page-frame">
+        <div class="browser-chrome">
+          <div class="browser-dots">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="browser-url-bar">
+            <span class="browser-url-icon">🔒</span>
+            <span class="browser-url-text">instacart.com / store / spring-promo</span>
+          </div>
+        </div>
+        <div class="page-content" id="page-content">
+
+      <!-- Hero section -->
+      <div class="ps" id="s-hero" onclick="selSection(event,'hero','Hero banner')">
+        <div class="ps-label">Hero banner</div>
+        <div class="ps-hover-hint"></div>
+        <div class="ps-edit-btn" onclick="selSection(event,'hero','Hero banner')">Edit</div>
+        <div class="ps-actions" onclick="event.stopPropagation()">
+          <button class="ps-act" title="Move" onclick="psMove('s-hero')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12M8 2L6 4M8 2l2 2M8 14l-2-2M8 14l2-2M2 8l2-2M2 8l2 2M14 8l-2-2M14 8l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="ps-act-sep"></div>
+          <button class="ps-act" title="Duplicate" onclick="psDuplicate('s-hero')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 11V3.5A1.5 1.5 0 014.5 2H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+          <div class="ps-act-sep"></div>
+          <button class="ps-act danger" title="Delete" onclick="psDelete('s-hero')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M6 4.5V3h4v1.5M5.5 4.5v7a1 1 0 001 1h3a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="img-ph">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="margin-right:6px"><rect x="1" y="1" width="18" height="18" rx="3" stroke="#C4C2BA" stroke-width="1.5" fill="none"/><path d="M1 13l5-5 4 4 3-3 6 4" stroke="#C4C2BA" stroke-width="1.5" stroke-linejoin="round" fill="none"/><circle cx="6" cy="6.5" r="1.5" fill="#C4C2BA"/></svg>
+          Image placeholder
+        </div>
+        <div class="hero-heading">
+          <span class="etxt" id="t-head" onclick="editText(event,'t-head')">Welcome back, Zia</span>
+        </div>
+        <div class="ph" style="width:60%"></div>
+        <div class="ph" style="width:40%"></div>
+        <div class="cta-btn">Shop now →</div>
+      </div>
+
+      <!-- Add: between hero and featured -->
+      <div class="add-block" onclick="addBlockClick(event)">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Add
+      </div>
+
+      <!-- Featured items section -->
+      <div class="ps" id="s-feat" onclick="selSection(event,'feat','Featured items')">
+        <div class="ps-label">Featured items</div>
+        <div class="ps-hover-hint"></div>
+        <div class="ps-edit-btn" onclick="selSection(event,'feat','Featured items')">Edit</div>
+        <div class="ps-actions" onclick="event.stopPropagation()">
+          <button class="ps-act" title="Move" onclick="psMove('s-feat')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12M8 2L6 4M8 2l2 2M8 14l-2-2M8 14l2-2M2 8l2-2M2 8l2 2M14 8l-2-2M14 8l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="ps-act-sep"></div>
+          <button class="ps-act" title="Duplicate" onclick="psDuplicate('s-feat')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 11V3.5A1.5 1.5 0 014.5 2H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+          <div class="ps-act-sep"></div>
+          <button class="ps-act danger" title="Delete" onclick="psDelete('s-feat')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M6 4.5V3h4v1.5M5.5 4.5v7a1 1 0 001 1h3a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:12px">
+          <span class="etxt" id="t-feat" onclick="editText(event,'t-feat')">Featured items</span>
+        </div>
+        <div class="product-grid">
+          <div class="product-card"><div class="product-thumb"></div><div class="product-name"></div></div>
+          <div class="product-card"><div class="product-thumb"></div><div class="product-name"></div></div>
+          <div class="product-card"><div class="product-thumb"></div><div class="product-name"></div></div>
+        </div>
+      </div>
+
+      <!-- Add: between featured and promotions -->
+      <div class="add-block" onclick="addBlockClick(event)">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Add
+      </div>
+
+      <!-- Promotions section -->
+      <div class="ps" id="s-promo" onclick="selSection(event,'promo','Promotions')">
+        <div class="ps-label">Promotions</div>
+        <div class="ps-hover-hint"></div>
+        <div class="ps-edit-btn" onclick="selSection(event,'promo','Promotions')">Edit</div>
+        <div class="ps-actions" onclick="event.stopPropagation()">
+          <button class="ps-act" title="Move" onclick="psMove('s-promo')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12M8 2L6 4M8 2l2 2M8 14l-2-2M8 14l2-2M2 8l2-2M2 8l2 2M14 8l-2-2M14 8l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="ps-act-sep"></div>
+          <button class="ps-act" title="Duplicate" onclick="psDuplicate('s-promo')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 11V3.5A1.5 1.5 0 014.5 2H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+          <div class="ps-act-sep"></div>
+          <button class="ps-act danger" title="Delete" onclick="psDelete('s-promo')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M6 4.5V3h4v1.5M5.5 4.5v7a1 1 0 001 1h3a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:8px">
+          <span class="etxt" id="t-promo" onclick="editText(event,'t-promo')">Promotions</span>
+        </div>
+        <div class="promo-strip">
+          <div class="promo-dot"></div>
+          <div style="flex:1"><div class="ph" style="width:55%;margin-bottom:4px"></div><div class="ph" style="width:35%;margin-bottom:0"></div></div>
+          <div style="font-size:11px;color:#185FA5;font-weight:500;white-space:nowrap">View all →</div>
+        </div>
+      </div>
+
+      <!-- Add: after promotions -->
+      <div class="add-block" onclick="addBlockClick(event)">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Add
+      </div>
+
+        </div><!-- /page-content -->
+      </div><!-- /page-frame -->
+
+      <!-- Inline text toolbar -->
+      <div class="itbar" id="itbar">
+        <button class="tbb on">B</button>
+        <button class="tbb">I</button>
+        <button class="tbb">U</button>
+        <div class="tsep"></div>
+        <button class="tbb">14</button>
+        <button class="tbb">H1</button>
+        <div class="tsep"></div>
+        <span class="csw" style="background:#1a1a1a" title="Dark"></span>
+        <span class="csw" style="background:#185FA5" title="Blue"></span>
+        <span class="csw" style="background:#0F6E56" title="Green"></span>
+        <span class="csw" style="background:#993C1D" title="Coral"></span>
+        <span class="csw" style="background:#888780" title="Gray"></span>
+        <div class="tsep"></div>
+        <button class="tbb">≡</button>
+        <button class="tbb">⊞</button>
+        <div class="tsep"></div>
+        <div class="done-btn" id="doneBtn">Done</div>
+      </div>
+
+    </div><!-- /canvas -->
+
+    <!-- Right section panel -->
+    <div class="rpanel" id="rpanel">
+      <div class="rpanel-inner">
+
+        <div class="rp-header">
+          <div class="rp-title" id="rp-title">Hero banner</div>
+          <button class="rp-close" id="rpClose" title="Close panel">✕</button>
+        </div>
+
+        <div class="rp-sec-label">Layout</div>
+        <div class="lo-opts">
+          <div class="lo on" title="Single column"><div class="lo-mini"><div class="lo-col"></div></div></div>
+          <div class="lo" title="Two columns"><div class="lo-mini"><div class="lo-col"></div><div class="lo-col"></div></div></div>
+          <div class="lo" title="Three columns"><div class="lo-mini"><div class="lo-col"></div><div class="lo-col"></div><div class="lo-col"></div></div></div>
+        </div>
+
+        <div class="rp-sec-label">Background</div>
+        <div class="fi">
+          <div class="swatch-row">
+            <div class="swatch on" style="background:#fff;border-color:#185FA5" title="White"></div>
+            <div class="swatch" style="background:#E6F1FB" title="Blue tint"></div>
+            <div class="swatch" style="background:#E1F5EE" title="Green tint"></div>
+            <div class="swatch" style="background:#FAECE7" title="Coral tint"></div>
+            <div class="swatch" style="background:#F1EFE8" title="Sand"></div>
+          </div>
+        </div>
+
+        <div class="rp-sec-label">Properties</div>
+        <div class="fi">
+          <div class="fi-label">Padding</div>
+          <input class="fi-input" placeholder="16px" type="text" readonly>
+        </div>
+
+        <div class="fi">
+          <div class="fi-label">Visibility</div>
+          <div class="toggle-row">
+            <div class="toggle" id="visToggle" onclick="this.classList.toggle('off')"></div>
+            <div class="toggle-label">Always visible</div>
+          </div>
+        </div>
+
+        <div class="rp-sec-label">Advanced</div>
+        <div class="adv-link">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M6 3v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Add visibility rule
+        </div>
+        <div class="adv-link">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M4 6h4M6 4v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Add A/B variant
+        </div>
+
+        <button class="btn-save-section" onclick="saveSection()">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10v1a1 1 0 001 1h9a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Save section to library
+        </button>
+
+        <div class="rp-actions">
+          <div class="btn-dup">Duplicate</div>
+          <div class="btn-del">Delete</div>
+        </div>
+
+      </div>
+    </div><!-- /rpanel -->
+
+  </div><!-- /main -->
+</div><!-- /builder -->
+
+
+<script>
+  var state = 'default';
+  var activeSec = null;
+  var activeTxt = null;
+  var activeNav = null;
+
+  function setNavActive(name) {
+    document.querySelectorAll('.lnav-item').forEach(function(el) { el.classList.remove('active'); });
+    if (name) {
+      var el = document.getElementById('nav-' + name);
+      if (el) el.classList.add('active');
+    }
+    activeNav = name;
+  }
+
+  function closeAllPanels() {
+    document.getElementById('lpanel').classList.remove('open');
+    document.getElementById('spanel').classList.remove('open');
+    document.getElementById('strpanel').classList.remove('open');
+    if (state === 'blocks') state = 'default';
+  }
+
+  function closeStrPanel() {
+    document.getElementById('strpanel').classList.remove('open');
+    setNavActive(null);
+  }
+
+  function suppressPanelTransitions() {
+    // Temporarily disable transitions on all left panels so switching between
+    // open panels feels instant rather than sliding closed then open.
+    var panels = ['lpanel', 'spanel', 'strpanel'];
+    panels.forEach(function(id) {
+      document.getElementById(id).classList.add('no-transition');
+    });
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        panels.forEach(function(id) {
+          document.getElementById(id).classList.remove('no-transition');
+        });
+      });
+    });
+  }
+
+  function anyPanelOpen() {
+    return document.getElementById('lpanel').classList.contains('open') ||
+           document.getElementById('spanel').classList.contains('open') ||
+           document.getElementById('strpanel').classList.contains('open');
+  }
+
+  function switchNav(name) {
+    var lpanel = document.getElementById('lpanel');
+    var spanel = document.getElementById('spanel');
+
+    if (name === 'add') {
+      // Toggle block picker panel
+      if (state === 'blocks') {
+        lpanel.classList.remove('open');
+        setNavActive(null);
+        state = 'default';
+        setBreadcrumb(null);
+      } else {
+        if (anyPanelOpen()) suppressPanelTransitions();
+        closeSection();
+        spanel.classList.remove('open');
+        strpanel.classList.remove('open');
+        lpanel.classList.add('open');
+        setNavActive('add');
+        state = 'blocks';
+        setBreadcrumb(null);
+      }
+    } else if (name === 'sections') {
+      // Structure panel toggle
+      if (activeNav === 'sections') {
+        closeStrPanel();
+      } else {
+        if (anyPanelOpen()) suppressPanelTransitions();
+        closeAllPanels();
+        closeSection();
+        document.getElementById('strpanel').classList.add('open');
+        setNavActive('sections');
+      }
+    } else if (name === 'setup') {
+      // Toggle setup panel
+      if (activeNav === 'setup') {
+        spanel.classList.remove('open');
+        setNavActive(null);
+      } else {
+        if (anyPanelOpen()) suppressPanelTransitions();
+        closeAllPanels();
+        closeSection();
+        spanel.classList.add('open');
+        setNavActive('setup');
+      }
+    } else {
+      // Styles, AI tools — just toggle active highlight (placeholder)
+      if (anyPanelOpen()) suppressPanelTransitions();
+      closeAllPanels();
+      if (activeNav === name) {
+        setNavActive(null);
+      } else {
+        setNavActive(name);
+      }
+    }
+  }
+
+  // Toggle a setup step done/undone and update the progress ring
+  function toggleStep(el) {
+    el.classList.toggle('done');
+    var total = document.querySelectorAll('#sp-list .sp-item').length;
+    var done  = document.querySelectorAll('#sp-list .sp-item.done').length;
+    var circ  = 2 * Math.PI * 22;
+    var filled = (done / total) * circ;
+    document.getElementById('sp-ring-arc').setAttribute('stroke-dasharray', filled.toFixed(1) + ' ' + circ.toFixed(1));
+    document.getElementById('sp-ring-label').textContent = done + '/' + total;
+    document.querySelector('.sp-progress-sub').textContent = done + ' of ' + total + ' steps complete';
+  }
+
+  // ── Template dropdown ────────────────────────────────────────
+  var tplTemplates = [
+    { name: 'Default', meta: 'Current layout', active: true }
+  ];
+  var tplCount = 1;
+
+  function toggleTplDropdown() {
+    var dd = document.getElementById('tplDropdown');
+    dd.classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = document.getElementById('tplBtn');
+    var dd  = document.getElementById('tplDropdown');
+    if (dd && dd.classList.contains('open') && !btn.contains(e.target) && !dd.contains(e.target)) {
+      dd.classList.remove('open');
+    }
+  });
+
+  function switchTemplate(name, el) {
+    tplTemplates.forEach(function(t) { t.active = false; });
+    var t = tplTemplates.find(function(t) { return t.name === name; });
+    if (t) t.active = true;
+    document.getElementById('tplCurrentName').textContent = name;
+    document.querySelectorAll('.tpl-dd-item').forEach(function(item) {
+      item.classList.remove('active');
+      item.querySelector('.tpl-dd-check') && (item.querySelector('.tpl-dd-check').style.display = 'none');
+    });
+    el.classList.add('active');
+    var chk = el.querySelector('.tpl-dd-check');
+    if (chk) chk.style.display = '';
+    document.getElementById('tplDropdown').classList.remove('open');
+    showToast('Switched to "' + name + '"');
+  }
+
+  function saveAsTemplate() {
+    tplCount++;
+    var name = 'Template ' + tplCount;
+    tplTemplates.push({ name: name, meta: 'Saved just now', active: false });
+    var list = document.getElementById('tplList');
+    var item = document.createElement('div');
+    item.className = 'tpl-dd-item';
+    item.setAttribute('onclick', 'switchTemplate("' + name + '",this)');
+    item.innerHTML =
+      '<div class="tpl-dd-thumb"><svg width="20" height="16" viewBox="0 0 20 16" fill="none">' +
+      '<rect x="1" y="1" width="18" height="5" rx="1" fill="#D3D1C7"/>' +
+      '<rect x="1" y="8" width="8" height="7" rx="1" fill="#EEECEA"/>' +
+      '<rect x="11" y="8" width="8" height="7" rx="1" fill="#EEECEA"/></svg></div>' +
+      '<div class="tpl-dd-info"><div class="tpl-dd-name">' + name + '</div>' +
+      '<div class="tpl-dd-meta">Saved just now</div></div>' +
+      '<svg class="tpl-dd-check" width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:none">' +
+      '<path d="M2 7l3.5 3.5L12 3" stroke="#185FA5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    list.appendChild(item);
+    document.getElementById('tplDropdown').classList.remove('open');
+    showToast('Layout saved as "' + name + '"');
+  }
+
+  // ── Save section to library ──────────────────────────────────
+  function saveSection() {
+    var title = document.getElementById('rp-title').textContent || 'Section';
+    var empty  = document.getElementById('custom-empty');
+    var saved  = document.getElementById('custom-saved');
+    empty.style.display = 'none';
+    saved.style.display = '';
+    var item = document.createElement('div');
+    item.className = 'lp-item';
+    item.innerHTML =
+      '<div class="lp-item-thumb"><svg width="24" height="16" viewBox="0 0 24 16" fill="none">' +
+      '<rect x="1" y="1" width="22" height="14" rx="2" fill="#E8E6E0"/>' +
+      '<rect x="3" y="3" width="18" height="4" rx="1" fill="#D3D1C7"/>' +
+      '<rect x="3" y="9" width="12" height="2" rx="1" fill="#D3D1C7"/></svg></div>' +
+      '<span class="lp-item-name">' + title + '<span class="saved-badge">Saved</span></span>';
+    saved.appendChild(item);
+    showToast('"' + title + '" saved to library');
+  }
+
+  // ── Toast helper ─────────────────────────────────────────────
+  function showToast(msg) {
+    var t = document.getElementById('tplToast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2200);
+  }
+
+  function setBreadcrumb(name) {
+    var bc = document.getElementById('bc');
+    if (!name) {
+      bc.innerHTML = '<span>Page</span><span class="sep"> / </span><b>Loyalty page</b>';
+    } else {
+      bc.innerHTML = '<span>Page</span><span class="sep"> / </span><span>Loyalty page</span><span class="sep"> / </span><b>' + name + '</b>';
+    }
+  }
+
+  function selSection(e, id, name) {
+    if (e.target.classList.contains('etxt')) return;
+    e.stopPropagation();
+
+    // close left panels
+    document.getElementById('lpanel').classList.remove('open');
+    document.getElementById('spanel').classList.remove('open');
+    document.getElementById('strpanel').classList.remove('open');
+    setNavActive(null);
+    if (state === 'blocks') state = 'default';
+
+    // close text edit
+    closeTextEdit(false);
+
+    // deselect all sections
+    document.querySelectorAll('.ps').forEach(function(p) { p.classList.remove('sel'); });
+
+    // select this one
+    document.getElementById('s-' + id).classList.add('sel');
+    document.getElementById('rp-title').textContent = name;
+    document.getElementById('rpanel').classList.add('open');
+
+    activeSec = id;
+    state = 'section';
+    setBreadcrumb(name);
+  }
+
+  function closeSection() {
+    document.querySelectorAll('.ps').forEach(function(p) { p.classList.remove('sel'); });
+    document.getElementById('rpanel').classList.remove('open');
+    closeTextEdit(false);
+    activeSec = null;
+  }
+
+  function editText(e, tid) {
+    e.stopPropagation();
+
+    // Close previous editable
+    if (activeTxt && activeTxt !== tid) {
+      var prev = document.getElementById(activeTxt);
+      if (prev) {
+        prev.classList.remove('editing');
+        prev.removeAttribute('contenteditable');
+        prev.removeEventListener('keydown', prev._kbHandler);
+      }
+    }
+
+    var el = document.getElementById(tid);
+    el.classList.add('editing');
+    el.setAttribute('contenteditable', 'true');
+    el.focus();
+
+    // Select all text on first open
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch(err) {}
+
+    // Enter key closes editing
+    el._kbHandler = function(ev) {
+      if (ev.key === 'Enter') { ev.preventDefault(); closeTextEdit(); }
+      if (ev.key === 'Escape') { ev.preventDefault(); closeTextEdit(); }
+      ev.stopPropagation();
+    };
+    el.addEventListener('keydown', el._kbHandler);
+
+    activeTxt = tid;
+
+    // Position toolbar above the element
+    var canvas = document.getElementById('canvas');
+    var toolbar = document.getElementById('itbar');
+    var canvasRect = canvas.getBoundingClientRect();
+    var elRect = el.getBoundingClientRect();
+    var top  = elRect.top  - canvasRect.top  + canvas.scrollTop - 44;
+    var left = elRect.left - canvasRect.left;
+    var maxLeft = canvas.offsetWidth - 340;
+
+    toolbar.style.top  = Math.max(4, top) + 'px';
+    toolbar.style.left = Math.min(Math.max(4, left), maxLeft) + 'px';
+    toolbar.classList.add('show');
+
+    state = 'textedit';
+  }
+
+  function closeTextEdit(updateState) {
+    if (activeTxt) {
+      var el = document.getElementById(activeTxt);
+      if (el) {
+        el.classList.remove('editing');
+        el.removeAttribute('contenteditable');
+        el.removeEventListener('keydown', el._kbHandler);
+        el.blur();
+      }
+      activeTxt = null;
+    }
+    document.getElementById('itbar').classList.remove('show');
+    if (updateState !== false && state === 'textedit') {
+      state = activeSec ? 'section' : 'default';
+    }
+  }
+
+  function canvasBgClick(e) {
+    var cv = document.getElementById('canvas');
+    var pc = document.getElementById('page-content');
+    var pf = document.getElementById('page-frame');
+    var isBackground = (e.target === cv || e.target === pc || e.target === pf);
+    if (!isBackground) return;
+    if (state === 'textedit') { closeTextEdit(); return; }
+    if (state === 'section') {
+      closeSection();
+      state = 'default';
+      setBreadcrumb(null);
+      return;
+    }
+    if (state === 'blocks') {
+      document.getElementById('lpanel').classList.remove('open');
+      setNavActive(null);
+      state = 'default';
+    }
+    // also close setup panel if open
+    if (activeNav === 'setup') {
+      document.getElementById('spanel').classList.remove('open');
+      setNavActive(null);
+    }
+  }
+
+  // Done button
+  document.getElementById('doneBtn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTextEdit();
+  });
+
+  // Close panel button
+  document.getElementById('rpClose').addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeSection();
+    state = 'default';
+    setBreadcrumb(null);
+  });
+
+  // Stop toolbar clicks from bubbling
+  document.getElementById('itbar').addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // Add click — opens block panel (same as clicking Add in nav)
+  function addBlockClick(e) {
+    e.stopPropagation();
+    var lpanel = document.getElementById('lpanel');
+    closeSection();
+    lpanel.classList.add('open');
+    setNavActive('add');
+    state = 'blocks';
+    setBreadcrumb(null);
+  }
+
+  // Layout options toggle
+  document.querySelectorAll('.lo').forEach(function(lo) {
+    lo.addEventListener('click', function() {
+      document.querySelectorAll('.lo').forEach(function(l) { l.classList.remove('on'); });
+      lo.classList.add('on');
+    });
+  });
+
+  // Swatch toggle
+  document.querySelectorAll('.swatch').forEach(function(sw) {
+    sw.addEventListener('click', function() {
+      document.querySelectorAll('.swatch').forEach(function(s) { s.classList.remove('on'); s.style.borderColor = 'transparent'; });
+      sw.classList.add('on');
+      sw.style.borderColor = '#185FA5';
+    });
+  });
+
+  // Desktop/Mobile toggle
+  document.getElementById('dmDesktop').addEventListener('click', function() {
+    this.classList.add('on');
+    document.getElementById('dmMobile').classList.remove('on');
+  });
+  document.getElementById('dmMobile').addEventListener('click', function() {
+    this.classList.add('on');
+    document.getElementById('dmDesktop').classList.remove('on');
+  });
+
+  // Init breadcrumb
+  setBreadcrumb(null);
+
+  // ── Add panel: tab switching ─────────────────────────────────
+  function lpTab(el, name) {
+    document.querySelectorAll('.lp-tab').forEach(function(t) { t.classList.remove('on'); });
+    el.classList.add('on');
+    ['sections','blocks','custom'].forEach(function(n) {
+      var c = document.getElementById('lp-tab-' + n);
+      if (c) c.style.display = (n === name) ? '' : 'none';
+    });
+    document.getElementById('lp-search-input').value = '';
+    lpSearch('');
+  }
+
+  // ── Add panel: search filter ─────────────────────────────────
+  function lpSearch(val) {
+    var q = val.toLowerCase().trim();
+    document.querySelectorAll('#lp-tab-sections .lp-group').forEach(function(group) {
+      var any = false;
+      group.querySelectorAll('.lp-item').forEach(function(item) {
+        var name = item.querySelector('.lp-item-name').textContent.toLowerCase();
+        var show = !q || name.includes(q);
+        item.style.display = show ? '' : 'none';
+        if (show) any = true;
+      });
+      group.style.display = any ? '' : 'none';
+    });
+  }
+
+  // ── Add panel: hover preview ─────────────────────────────────
+  function showPreview(e, type) {
+    var preview = document.getElementById('lp-preview');
+    var rect = e.target.closest('.lp-item').getBoundingClientRect();
+    preview.style.top  = Math.max(60, rect.top) + 'px';
+    preview.style.left = (rect.right + 10) + 'px';
+    preview.classList.add('show');
+  }
+  function hidePreview() {
+    document.getElementById('lp-preview').classList.remove('show');
+  }
+
+  // ── Section action toolbar ───────────────────────────────────
+  function psMove(id) {
+    // Visual feedback: briefly flash a "drag to reorder" tooltip
+    var el = document.getElementById(id);
+    if (!el) return;
+    var tip = document.createElement('div');
+    tip.textContent = 'Drag to reorder';
+    tip.style.cssText = 'position:absolute;top:-30px;left:50%;transform:translateX(-50%);' +
+      'background:#1a1a1a;color:#fff;font-size:11px;padding:4px 10px;border-radius:5px;' +
+      'white-space:nowrap;pointer-events:none;z-index:30;opacity:0;transition:opacity 0.15s;';
+    el.appendChild(tip);
+    requestAnimationFrame(function() { tip.style.opacity = '1'; });
+    setTimeout(function() {
+      tip.style.opacity = '0';
+      setTimeout(function() { if (tip.parentNode) tip.parentNode.removeChild(tip); }, 200);
+    }, 1400);
+  }
+
+  function psDuplicate(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var uid    = 'ns' + Date.now();
+    var newId  = 's-' + uid;
+    var oldShort = id.replace(/^s-/, ''); // e.g. 'hero'
+
+    var clone = el.cloneNode(true);
+    clone.id = newId;
+    clone.classList.remove('sel');
+
+    // Fix onclick on the clone's root (selSection call uses the short id)
+    var rootOc = clone.getAttribute('onclick');
+    if (rootOc) clone.setAttribute('onclick', rootOc
+      .split("'" + oldShort + "'").join("'" + uid + "'"));
+
+    // Fix every child onclick — replace both 's-hero' and 'hero' references
+    clone.querySelectorAll('[onclick]').forEach(function(child) {
+      var oc = child.getAttribute('onclick');
+      oc = oc.split("'" + id + "'").join("'" + newId + "'");       // 's-hero' → 's-ns…'
+      oc = oc.split("'" + oldShort + "'").join("'" + uid + "'");   // 'hero'   → 'ns…'
+      child.setAttribute('onclick', oc);
+    });
+
+    // Insert: original → newAddBlock → clone
+    var newAb = document.createElement('div');
+    newAb.className = 'add-block';
+    newAb.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Add';
+    newAb.addEventListener('click', function(e) { addBlockClick(e); });
+    var parent = el.parentNode;
+    parent.insertBefore(newAb, el.nextSibling);
+    parent.insertBefore(clone, newAb);
+    wireAddBlockDrop(newAb);
+
+    // Brief highlight on clone
+    clone.style.transition = 'box-shadow 0.3s';
+    clone.style.boxShadow = '0 0 0 3px rgba(55,138,221,0.35)';
+    setTimeout(function() { clone.style.boxShadow = ''; }, 500);
+  }
+
+  function psDelete(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var next = el.nextElementSibling; // use nextElementSibling to skip text nodes
+    el.style.transition = 'opacity 0.2s, transform 0.2s';
+    el.style.opacity = '0';
+    el.style.transform = 'scaleY(0.85)';
+    setTimeout(function() {
+      // Remove the trailing add-block to avoid doubles
+      if (next && next.classList && next.classList.contains('add-block')) next.remove();
+      el.remove();
+      closeSection();
+      state = 'default';
+      setBreadcrumb(null);
+    }, 200);
+  }
+
+  // ── Drag section from Add panel → canvas ────────────────────
+  var draggingSectionName = null;
+
+  function initAddPanelDrag() {
+    document.querySelectorAll('.lp-item').forEach(function(item) {
+      item.setAttribute('draggable', 'true');
+      item.addEventListener('dragstart', function(e) {
+        draggingSectionName = item.querySelector('.lp-item-name').textContent.trim();
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData('text/plain', draggingSectionName);
+
+        // Build custom drag thumbnail
+        var thumb = document.createElement('div');
+        thumb.style.cssText = [
+          'position:fixed', 'top:-9999px', 'left:-9999px',
+          'background:#fff', 'border:1px solid #C4C2BA', 'border-radius:10px',
+          'padding:10px', 'box-shadow:0 6px 20px rgba(0,0,0,0.14)',
+          'width:148px', 'pointer-events:none',
+          'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif'
+        ].join(';');
+
+        // Wireframe preview area — scaled-up version of the thumb SVG
+        var previewArea = document.createElement('div');
+        previewArea.style.cssText = 'background:#F5F4F0;border-radius:6px;height:60px;' +
+          'display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden;';
+        var srcSvg = item.querySelector('.lp-item-thumb svg');
+        if (srcSvg) {
+          var bigSvg = srcSvg.cloneNode(true);
+          bigSvg.setAttribute('width', '90');
+          bigSvg.setAttribute('height', '56');
+          bigSvg.style.cssText = 'width:90px;height:56px;';
+          previewArea.appendChild(bigSvg);
+        }
+
+        // Label
+        var nameEl = document.createElement('div');
+        nameEl.textContent = draggingSectionName;
+        nameEl.style.cssText = 'font-size:11px;color:#5F5E5A;text-align:center;line-height:1.3;';
+
+        thumb.appendChild(previewArea);
+        thumb.appendChild(nameEl);
+        document.body.appendChild(thumb);
+
+        e.dataTransfer.setDragImage(thumb, 74, 36);
+        hidePreview();
+
+        setTimeout(function() {
+          if (thumb.parentNode) document.body.removeChild(thumb);
+          item.classList.add('is-dragging'); // cancel hover, dim the row
+        }, 0);
+      });
+
+      item.addEventListener('dragend', function() {
+        item.classList.remove('is-dragging');
+        draggingSectionName = null;
+        clearDropIndicators();
+      });
+    });
+    initCanvasDrop();
+  }
+
+  function initCanvasDrop() {
+    document.querySelectorAll('.add-block').forEach(function(ab) {
+      wireAddBlockDrop(ab);
+    });
+  }
+
+  function wireAddBlockDrop(ab) {
+    ab.addEventListener('dragover', function(e) {
+      if (!draggingSectionName) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+      clearDropIndicators();
+      ab.classList.add('drop-active');
+    });
+    ab.addEventListener('dragleave', function(e) {
+      // Only clear if truly leaving the element (not entering a child)
+      if (!ab.contains(e.relatedTarget)) {
+        ab.classList.remove('drop-active');
+      }
+    });
+    ab.addEventListener('drop', function(e) {
+      e.preventDefault();
+      ab.classList.remove('drop-active');
+      if (draggingSectionName) {
+        insertNewSection(ab, draggingSectionName);
+      }
+    });
+  }
+
+  function clearDropIndicators() {
+    document.querySelectorAll('.add-block.drop-active').forEach(function(ab) {
+      ab.classList.remove('drop-active');
+    });
+  }
+
+  function insertNewSection(dropTarget, name) {
+    var uid = 'ns' + Date.now();
+
+    // Build the new section element
+    var sec = document.createElement('div');
+    sec.className = 'ps';
+    sec.id = 's-' + uid;
+    var actBar = '<div class="ps-actions" onclick="event.stopPropagation()">' +
+      '<button class="ps-act" title="Move" onclick="psMove(\'s-' + uid + '\')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12M8 2L6 4M8 2l2 2M8 14l-2-2M8 14l2-2M2 8l2-2M2 8l2 2M14 8l-2-2M14 8l-2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+      '<div class="ps-act-sep"></div>' +
+      '<button class="ps-act" title="Duplicate" onclick="psDuplicate(\'s-' + uid + '\')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 11V3.5A1.5 1.5 0 014.5 2H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>' +
+      '<div class="ps-act-sep"></div>' +
+      '<button class="ps-act danger" title="Delete" onclick="psDelete(\'s-' + uid + '\')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M6 4.5V3h4v1.5M5.5 4.5v7a1 1 0 001 1h3a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+      '</div>';
+    sec.innerHTML =
+      '<div class="ps-label">' + name + '</div>' +
+      '<div class="ps-hover-hint"></div>' +
+      '<div class="ps-edit-btn" onclick="selSection(event,\'' + uid + '\',\'' + name + '\')">Edit</div>' +
+      actBar +
+      '<div style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:12px">' + name + '</div>' +
+      '<div class="ph" style="width:72%;margin-bottom:6px"></div>' +
+      '<div class="ph" style="width:50%;margin-bottom:6px"></div>' +
+      '<div class="ph" style="width:38%;margin-bottom:0"></div>';
+    sec.addEventListener('click', function(e) {
+      selSection(e, uid, name);
+    });
+
+    // New add-block to follow the new section
+    var newAb = document.createElement('div');
+    newAb.className = 'add-block';
+    newAb.innerHTML =
+      '<svg width="12" height="12" viewBox="0 0 12 12" fill="none">' +
+      '<path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+      ' Add';
+    newAb.addEventListener('click', function(e) { addBlockClick(e); });
+
+    // Insert: dropTarget → sec → newAb → rest
+    var parent = dropTarget.parentNode;
+    parent.insertBefore(sec, dropTarget.nextSibling);
+    parent.insertBefore(newAb, sec.nextSibling);
+    wireAddBlockDrop(newAb);
+
+    // Brief flash animation
+    sec.style.transition = 'box-shadow 0.3s';
+    sec.style.boxShadow = '0 0 0 3px rgba(55,138,221,0.35)';
+    setTimeout(function() { sec.style.boxShadow = ''; }, 500);
+
+    // Open right panel for the new section
+    document.querySelectorAll('.ps').forEach(function(p) { p.classList.remove('sel'); });
+    sec.classList.add('sel');
+    document.getElementById('rp-title').textContent = name;
+    document.getElementById('rpanel').classList.add('open');
+    activeSec = uid;
+    state = 'section';
+    setBreadcrumb(name);
+    // Close add panel
+    document.getElementById('lpanel').classList.remove('open');
+    setNavActive(null);
+  }
+
+  initAddPanelDrag();
+
+  // ── Structure panel drag & drop ──────────────────────────────
+  var dragEl = null;
+  var dragZone = null;
+
+  function initStructureDrag() {
+    document.querySelectorAll('.str-item').forEach(function(item) {
+
+      item.addEventListener('dragstart', function(e) {
+        // Locked items (header/footer) can only reorder within their zone
+        dragEl   = item;
+        dragZone = item.dataset.zone;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(function() { item.classList.add('dragging'); }, 0);
+      });
+
+      item.addEventListener('dragend', function() {
+        item.classList.remove('dragging');
+        dragEl = null; dragZone = null;
+        document.querySelectorAll('.str-item').forEach(function(i) {
+          i.classList.remove('drag-over');
+        });
+      });
+
+      item.addEventListener('dragover', function(e) {
+        if (!dragEl || dragEl === item) return;
+        // Block cross-zone for ALL zones — each zone is its own island
+        if (item.dataset.zone !== dragZone) {
+          e.dataTransfer.dropEffect = 'none';
+          return;
+        }
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        document.querySelectorAll('.str-item').forEach(function(i) { i.classList.remove('drag-over'); });
+        item.classList.add('drag-over');
+      });
+
+      item.addEventListener('dragleave', function() {
+        item.classList.remove('drag-over');
+      });
+
+      item.addEventListener('drop', function(e) {
+        e.preventDefault();
+        item.classList.remove('drag-over');
+        if (!dragEl || dragEl === item) return;
+        if (item.dataset.zone !== dragZone) return;
+        // Reorder within same zone list
+        var list = document.getElementById('list-' + dragZone);
+        var items = Array.from(list.querySelectorAll('.str-item'));
+        var fromIdx = items.indexOf(dragEl);
+        var toIdx   = items.indexOf(item);
+        if (fromIdx < toIdx) {
+          list.insertBefore(dragEl, item.nextSibling);
+        } else {
+          list.insertBefore(dragEl, item);
+        }
+      });
+    });
+  }
+
+  initStructureDrag();
+</script>
+</body>
+</html>
