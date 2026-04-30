@@ -549,12 +549,12 @@
 
   /* ─── Custom tab entry points ──────────────────────────────── */
   .custom-entry-question {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
-    color: #5F5E5A;
-    padding: 10px 14px 4px;
+    color: #888780;
+    padding: 12px 14px 6px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
   }
   .custom-entry-list {
     display: flex;
@@ -589,6 +589,73 @@
   .custom-entry-title { font-size: 12px; font-weight: 500; color: #1a1a1a; }
   .custom-entry-sub { font-size: 11px; color: #888780; margin-top: 1px; }
   .custom-entry-arrow { color: #B4B2A9; font-size: 14px; flex-shrink: 0; }
+  .entry-badge {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 99px;
+    background: #E1F5EE;
+    color: #0F6E56;
+    flex-shrink: 0;
+    line-height: 1.4;
+  }
+
+  /* ─── Frequently used ──────────────────────────────────────── */
+  .freq-section {
+    padding: 4px 14px 12px;
+    border-top: 1px solid #EEECEA;
+    margin-top: 4px;
+  }
+  .freq-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #888780;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 12px 0 8px;
+  }
+  .freq-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.12s;
+    margin-bottom: 2px;
+  }
+  .freq-item:hover { background: #F5F4F0; }
+  .freq-thumb {
+    width: 44px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid #EEECEA;
+  }
+  .freq-thumb svg { display: block; width: 100%; height: 100%; }
+  .freq-info { flex: 1; min-width: 0; }
+  .freq-name { font-size: 12px; font-weight: 500; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .freq-tag { font-size: 10px; color: #888780; margin-top: 1px; }
+  .freq-add {
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid #D3D1C7;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #5F5E5A;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 0.12s, background 0.12s;
+  }
+  .freq-item:hover .freq-add { opacity: 1; }
+  .freq-add:hover { background: #F5F4F0; }
 
   .custom-divider {
     display: flex;
@@ -1934,15 +2001,15 @@
         <div class="lp-content" id="lp-tab-sections">
 
           <!-- Entry points — shown first -->
+          <div class="custom-entry-question">What do you want to add?</div>
           <div class="custom-entry-list" style="padding-bottom:8px;">
-            <div class="custom-entry-question">What do you want to add?</div>
             <div class="custom-entry" onclick="openLibrary()">
               <div class="custom-entry-icon">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>
               </div>
               <div class="custom-entry-text">
-                <div class="custom-entry-title">Pre-built section</div>
-                <div class="custom-entry-sub">Pick from the template library</div>
+                <div class="custom-entry-title">Pre-built element</div>
+                <div class="custom-entry-sub">Browse and add curated elements</div>
               </div>
               <span class="custom-entry-arrow">›</span>
             </div>
@@ -1965,6 +2032,47 @@
                 <div class="custom-entry-sub">Write your own HTML & CSS</div>
               </div>
               <span class="custom-entry-arrow">›</span>
+            </div>
+          </div>
+
+          <!-- Frequently used -->
+          <div class="freq-section">
+            <div class="freq-title">Frequently used</div>
+            <div class="freq-item" onclick="showToast('Regular banner added')">
+              <div class="freq-thumb">
+                <svg width="40" height="28" viewBox="0 0 40 28" fill="none"><rect x="0.5" y="0.5" width="39" height="27" rx="2" fill="#EEECEA" stroke="#D3D1C7"/><rect x="4" y="5" width="16" height="2" rx="1" fill="#B4B2A9"/><rect x="4" y="9" width="22" height="2" rx="1" fill="#B4B2A9"/><rect x="4" y="14" width="10" height="7" rx="1" fill="#D3D1C7"/></svg>
+              </div>
+              <div class="freq-info">
+                <div class="freq-name">Regular banner</div>
+                <div class="freq-tag">Banner</div>
+              </div>
+              <button class="freq-add" title="Add">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <div class="freq-item" onclick="showToast('Regular carousel added')">
+              <div class="freq-thumb">
+                <svg width="40" height="28" viewBox="0 0 40 28" fill="none"><rect x="0.5" y="0.5" width="39" height="27" rx="2" fill="#EEECEA" stroke="#D3D1C7"/><rect x="4" y="5" width="9" height="16" rx="1" fill="#D3D1C7"/><rect x="15" y="5" width="9" height="16" rx="1" fill="#D3D1C7"/><rect x="26" y="5" width="9" height="16" rx="1" fill="#D3D1C7"/></svg>
+              </div>
+              <div class="freq-info">
+                <div class="freq-name">Regular carousel</div>
+                <div class="freq-tag">Product collections</div>
+              </div>
+              <button class="freq-add" title="Add">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <div class="freq-item" onclick="showToast('Quick links added')">
+              <div class="freq-thumb">
+                <svg width="40" height="28" viewBox="0 0 40 28" fill="none"><rect x="0.5" y="0.5" width="39" height="27" rx="2" fill="#EEECEA" stroke="#D3D1C7"/><rect x="4" y="6" width="7" height="7" rx="1" fill="#D3D1C7"/><rect x="13" y="6" width="7" height="7" rx="1" fill="#D3D1C7"/><rect x="22" y="6" width="7" height="7" rx="1" fill="#D3D1C7"/><rect x="31" y="6" width="5" height="7" rx="1" fill="#D3D1C7"/><rect x="4" y="15" width="7" height="2" rx="1" fill="#B4B2A9"/><rect x="13" y="15" width="7" height="2" rx="1" fill="#B4B2A9"/><rect x="22" y="15" width="7" height="2" rx="1" fill="#B4B2A9"/></svg>
+              </div>
+              <div class="freq-info">
+                <div class="freq-name">Quick links</div>
+                <div class="freq-tag">Links</div>
+              </div>
+              <button class="freq-add" title="Add">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
             </div>
           </div>
 
@@ -3124,8 +3232,8 @@
   <div class="lib-modal">
     <div class="lib-header">
       <div>
-        <div class="lib-title">Template library</div>
-        <div class="lib-sub">Choose a starting layout for your Loyalty page</div>
+        <div class="lib-title">Pre-built element library</div>
+        <div class="lib-sub">Choose a starting layout for your page</div>
       </div>
       <button class="lib-close" onclick="closeLibrary()">✕</button>
     </div>
