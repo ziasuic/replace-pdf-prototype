@@ -3549,10 +3549,11 @@
       ' Add';
     newAb.addEventListener('click', function(e) { addBlockClick(e); });
 
-    // Insert: dropTarget → sec → newAb → rest
+    // Replace the clicked add-block with: sec → newAb
     var parent = dropTarget.parentNode;
-    parent.insertBefore(sec, dropTarget.nextSibling);
-    parent.insertBefore(newAb, sec.nextSibling);
+    parent.insertBefore(sec, dropTarget);
+    parent.insertBefore(newAb, dropTarget);
+    dropTarget.remove();
     wireAddBlockDrop(newAb);
 
     // Brief flash animation
