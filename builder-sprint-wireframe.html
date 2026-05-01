@@ -909,62 +909,6 @@
   .lp-preview-line { height: 6px; background: #E8E6E0; border-radius: 3px; }
   .lp-preview-btn { height: 18px; width: 60px; background: #185FA5; border-radius: 4px; }
 
-  /* ─── Blocks sub-view ───────────────────────────────── */
-  .blocks-view-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 14px 8px;
-    border-bottom: 1px solid #EEECEA;
-    margin-bottom: 4px;
-  }
-  .blocks-back-btn {
-    width: 26px; height: 26px;
-    border-radius: 6px;
-    border: 1px solid #D3D1C7;
-    background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    color: #5F5E5A;
-    flex-shrink: 0;
-    transition: background 0.12s;
-  }
-  .blocks-back-btn:hover { background: #F5F4F0; }
-  .blocks-view-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
-  .blocks-drop-hint {
-    font-size: 11px;
-    color: #888780;
-    padding: 8px 14px 10px;
-  }
-  .blocks-list {
-    display: flex;
-    flex-direction: column;
-    padding: 0 10px 12px;
-    gap: 2px;
-  }
-  .block-list-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 10px;
-    border-radius: 7px;
-    border: 1px solid transparent;
-    cursor: grab;
-    transition: background 0.12s, border-color 0.12s;
-    user-select: none;
-  }
-  .block-list-item:hover { background: #F5F4F0; border-color: #D3D1C7; }
-  .block-list-item:active { cursor: grabbing; }
-  .block-list-drag { font-size: 10px; color: #C4C2BA; letter-spacing: -1px; line-height: 1; }
-  .block-list-icon { color: #5F5E5A; flex-shrink: 0; display: flex; align-items: center; }
-  .block-list-label { font-size: 12px; font-weight: 500; color: #1a1a1a; flex: 1; }
-  /* Drop target highlight */
-  .add-block.drag-over {
-    border-color: #185FA5 !important;
-    background: rgba(55,138,221,0.08) !important;
-    color: #185FA5 !important;
-  }
-
   /* ─── Empty section ─────────────────────────────────── */
   .ps-empty {
     border: 2px dashed #378ADD;
@@ -2236,93 +2180,41 @@
         <div class="lp-content" id="lp-tab-sections">
 
           <!-- Entry points — shown first -->
-          <!-- Main view -->
-          <div id="lp-view-main">
-            <div class="custom-entry-question">What do you want to add?</div>
-            <div class="custom-entry-list" style="padding-bottom:8px;">
-              <div class="custom-entry" onclick="openLibrary()">
-                <div class="custom-entry-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>
-                </div>
-                <div class="custom-entry-text">
-                  <div class="custom-entry-title">Pre-built element</div>
-                  <div class="custom-entry-sub">Pick from curated layouts and sections</div>
-                </div>
-                <span class="custom-entry-arrow">›</span>
+          <div class="custom-entry-question">What do you want to add?</div>
+          <div class="custom-entry-list" style="padding-bottom:8px;">
+            <div class="custom-entry" onclick="openLibrary()">
+              <div class="custom-entry-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>
               </div>
-              <div class="custom-entry" onclick="showBlocksView()">
-                <div class="custom-entry-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/><rect x="9" y="9" width="3" height="6" rx="1" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>
-                </div>
-                <div class="custom-entry-text">
-                  <div class="custom-entry-title">Blocks</div>
-                  <div class="custom-entry-sub">Drag blocks directly onto the page</div>
-                </div>
-                <span class="custom-entry-arrow">›</span>
+              <div class="custom-entry-text">
+                <div class="custom-entry-title">Pre-built element</div>
+                <div class="custom-entry-sub">Pick from curated layouts and sections</div>
               </div>
-              <div class="custom-entry" onclick="startWithCode()">
-                <div class="custom-entry-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 4L2 8l3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 4l3 4-3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 2l-2 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                </div>
-                <div class="custom-entry-text">
-                  <div class="custom-entry-title">Custom code</div>
-                  <div class="custom-entry-sub">Write your own HTML & CSS</div>
-                </div>
-                <span class="custom-entry-arrow">›</span>
-              </div>
+              <span class="custom-entry-arrow">›</span>
             </div>
-          </div><!-- end entry list, stays inside lp-view-main -->
+            <div class="custom-entry" onclick="addEmptySection()">
+              <div class="custom-entry-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3" fill="none" stroke-dasharray="3 2"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </div>
+              <div class="custom-entry-text">
+                <div class="custom-entry-title">Empty section</div>
+                <div class="custom-entry-sub">Add blocks to build from scratch</div>
+              </div>
+              <span class="custom-entry-arrow">›</span>
+            </div>
+            <div class="custom-entry" onclick="startWithCode()">
+              <div class="custom-entry-icon">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 4L2 8l3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 4l3 4-3 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 2l-2 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </div>
+              <div class="custom-entry-text">
+                <div class="custom-entry-title">Custom code</div>
+                <div class="custom-entry-sub">Write your own HTML & CSS</div>
+              </div>
+              <span class="custom-entry-arrow">›</span>
+            </div>
+          </div>
 
-          <!-- Blocks sub-view (hidden by default) -->
-          <div id="lp-view-blocks" style="display:none;">
-            <div class="blocks-view-header">
-              <button class="blocks-back-btn" onclick="showMainView()">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <span class="blocks-view-title">Blocks</span>
-            </div>
-            <div class="blocks-drop-hint">Drag a block onto the page</div>
-            <div class="blocks-list">
-              <div class="block-list-item" draggable="true" data-block="Text" ondragstart="blockDragStart(event,'Text')">
-                <div class="block-list-drag">⋮⋮</div>
-                <div class="block-list-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h7M2 10h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
-                <div class="block-list-label">Text</div>
-              </div>
-              <div class="block-list-item" draggable="true" data-block="Button" ondragstart="blockDragStart(event,'Button')">
-                <div class="block-list-drag">⋮⋮</div>
-                <div class="block-list-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="4" width="10" height="6" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
-                <div class="block-list-label">Button</div>
-              </div>
-              <div class="block-list-item" draggable="true" data-block="Divider" ondragstart="blockDragStart(event,'Divider')">
-                <div class="block-list-drag">⋮⋮</div>
-                <div class="block-list-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 1.5"/></svg></div>
-                <div class="block-list-label">Divider</div>
-              </div>
-              <div class="block-list-item" draggable="true" data-block="Image" ondragstart="blockDragStart(event,'Image')">
-                <div class="block-list-drag">⋮⋮</div>
-                <div class="block-list-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9l3-3 3 3 2-2 3 2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><circle cx="5" cy="5" r="1" fill="currentColor"/></svg></div>
-                <div class="block-list-label">Image</div>
-              </div>
-              <div class="block-list-item" draggable="true" data-block="Video" ondragstart="blockDragStart(event,'Video')">
-                <div class="block-list-drag">⋮⋮</div>
-                <div class="block-list-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M10 5.5l2-1.5v6L10 8.5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
-                <div class="block-list-label">Video</div>
-              </div>
-              <div class="block-list-item" draggable="true" data-block="Icon" ondragstart="blockDragStart(event,'Icon')">
-                <div class="block-list-drag">⋮⋮</div>
-                <div class="block-list-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5l1.3 3.9H12l-3 2.2 1.1 3.9L7 9.1l-3.1 2.4L5 7.6l-3-2.2h3.7z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
-                <div class="block-list-label">Icon</div>
-              </div>
-              <div class="block-list-item" draggable="true" data-block="Logo" ondragstart="blockDragStart(event,'Logo')">
-                <div class="block-list-drag">⋮⋮</div>
-                <div class="block-list-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="4" width="10" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 7h2M8 6.5l2.5 1-2.5 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                <div class="block-list-label">Logo</div>
-              </div>
-            </div>
-          </div><!-- /lp-view-blocks -->
-
-          <!-- Frequently used (inside main view) -->
-          <div id="lp-view-main-freq">
+          <!-- Frequently used -->
           <div class="freq-section">
             <div class="freq-title">Frequently used</div>
             <div class="freq-item" onclick="showToast('Regular banner added')">
@@ -2362,7 +2254,6 @@
               </button>
             </div>
           </div>
-          </div><!-- /lp-view-main-freq -->
 
         </div><!-- /lp-tab-sections -->
 
@@ -2780,76 +2671,6 @@
       '<span class="lp-item-name">' + title + '<span class="saved-badge">Saved</span></span>';
     saved.appendChild(item);
     showToast('"' + title + '" saved to library');
-  }
-
-  // ── Blocks sub-view ──────────────────────────────────────────
-  function showBlocksView() {
-    document.getElementById('lp-view-main').style.display = 'none';
-    document.getElementById('lp-view-main-freq').style.display = 'none';
-    document.getElementById('lp-view-blocks').style.display = 'block';
-    // Activate drop zones
-    document.querySelectorAll('.add-block').forEach(function(zone) {
-      zone.addEventListener('dragover', blockDragOver);
-      zone.addEventListener('dragleave', blockDragLeave);
-      zone.addEventListener('drop', blockDrop);
-    });
-  }
-
-  function showMainView() {
-    document.getElementById('lp-view-blocks').style.display = 'none';
-    document.getElementById('lp-view-main').style.display = 'block';
-    document.getElementById('lp-view-main-freq').style.display = 'block';
-    // Clean up drop zones
-    document.querySelectorAll('.add-block').forEach(function(zone) {
-      zone.classList.remove('drag-over');
-      zone.removeEventListener('dragover', blockDragOver);
-      zone.removeEventListener('dragleave', blockDragLeave);
-      zone.removeEventListener('drop', blockDrop);
-    });
-  }
-
-  var draggingBlockName = null;
-
-  function blockDragStart(e, name) {
-    draggingBlockName = name;
-    e.dataTransfer.setData('text/plain', name);
-    e.dataTransfer.effectAllowed = 'copy';
-  }
-
-  function blockDragOver(e) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-    this.classList.add('drag-over');
-  }
-
-  function blockDragLeave(e) {
-    this.classList.remove('drag-over');
-  }
-
-  function blockDrop(e) {
-    e.preventDefault();
-    this.classList.remove('drag-over');
-    var name = e.dataTransfer.getData('text/plain') || draggingBlockName;
-    if (!name) return;
-    // Insert a simple block section at this drop zone
-    var uid = 'block-' + Date.now();
-    var sec = document.createElement('div');
-    sec.className = 'ps';
-    sec.id = uid;
-    sec.onclick = function(ev) { selSection(ev, uid, name); };
-    sec.innerHTML =
-      '<div class="ps-label">' + name + '</div>' +
-      '<div class="ps-hover-hint"></div>' +
-      '<div class="ps-edit-btn" onclick="selSection(event,\'' + uid + '\',\'' + name + '\')">Edit</div>' +
-      '<div class="ps-actions" onclick="event.stopPropagation()">' +
-        '<button class="ps-act danger" title="Delete" onclick="psDelete(\'' + uid + '\')"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M6 4.5V3h4v1.5M5.5 4.5v7a1 1 0 001 1h3a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
-      '</div>' +
-      '<div style="padding:16px;text-align:center;">' +
-        '<div style="font-size:12px;color:#888780;font-weight:500;">' + name + ' block</div>' +
-      '</div>';
-    this.parentNode.insertBefore(sec, this);
-    showToast('"' + name + '" block added');
-    draggingBlockName = null;
   }
 
   // ── Empty section + block picker ─────────────────────────────
